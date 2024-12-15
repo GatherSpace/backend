@@ -5,6 +5,7 @@ package com.hari.gatherspace.config;
  import io.jsonwebtoken.SignatureAlgorithm;
  import io.jsonwebtoken.io.Decoders;
  import io.jsonwebtoken.security.Keys;
+ import jakarta.servlet.http.HttpServletRequest;
  import org.springframework.beans.factory.annotation.Value;
  import org.springframework.security.core.userdetails.UserDetails;
  import org.springframework.stereotype.Component;
@@ -33,6 +34,14 @@ package com.hari.gatherspace.config;
                  .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                  .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                  .compact();
+     }
+
+     public String extractToken(HttpServletRequest request) {
+         final String bearerToken = request.getHeader("Authorization");
+         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+             return bearerToken.substring(7);
+         }
+         return null;
      }
 
 

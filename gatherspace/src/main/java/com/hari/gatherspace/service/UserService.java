@@ -3,10 +3,9 @@ package com.hari.gatherspace.service;
 
 import com.hari.gatherspace.model.User;
 import com.hari.gatherspace.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,8 +23,13 @@ public class UserService implements UserDetailsService {
     UserService(UserRepository userRepository){
         this.userRepository = userRepository;
     }
+    @Transactional
+    public void updateUser( User user){
 
-
+         userRepository.save(user);
+         return;
+    }
+    @Transactional
     public User saveUser(User user){
         return userRepository.save(user);
     }

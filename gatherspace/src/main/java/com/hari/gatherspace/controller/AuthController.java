@@ -1,11 +1,10 @@
-package com.hari.gatherspace.controller.ws;
+package com.hari.gatherspace.controller;
 
 import com.hari.gatherspace.config.JwtUtil;
 import com.hari.gatherspace.dto.UserDTO;
 import com.hari.gatherspace.dto.UserSigninDTO;
 import com.hari.gatherspace.model.Role;
 import com.hari.gatherspace.model.User;
-import com.hari.gatherspace.repository.UserRepository;
 import com.hari.gatherspace.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
