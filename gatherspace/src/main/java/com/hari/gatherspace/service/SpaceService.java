@@ -1,5 +1,6 @@
 package com.hari.gatherspace.service;
 
+import com.hari.gatherspace.dto.ElementDTO;
 import com.hari.gatherspace.model.Map;
 import com.hari.gatherspace.model.Space;
 import com.hari.gatherspace.model.SpaceElements;
@@ -32,7 +33,7 @@ public class SpaceService {
             spaceElements.setElementId(e.getId());
             spaceElements.setX(e.getX());
             spaceElements.setY(e.getY());
-            return spaceElementsService.save(spaceElements);
+            return spaceElements;
         }).toList());
 
         return spaceRepository.save(space1);
@@ -41,9 +42,39 @@ public class SpaceService {
 
     }
 
-    public Space getSpaceById(String id) {
-        return spaceRepository.findById(id).orElse(null);
+    public SpaceElements getSpaceElementById(String spaceElementId) {
+        return spaceElementsService.findById(spaceElementId);
+    }
 
+
+
+    @Transactional
+    public void deleteSpaceElement(String spaceElementId) {
+        spaceElementsService.deleteById(spaceElementId);
+    }
+
+    public Space getSpaceById(String id) {
+        Space space  =  spaceRepository.findById(id).orElse(null);
+        return space;
+
+    }
+
+    @Transactional
+    public void addElement(ElementDTO element) {
+        Space space = spaceRepository.findById(element.getSpaceId()).orElse(null);
+        if (space == null) {
+            return;
+        }
+        SpaceElements spaceElements = new SpaceElements();
+        spaceElements.setSpaceId(element.getSpaceId());
+        spaceElements.setElementId(element.getElementId());
+        spaceElements.setX(element.getX());
+        spaceElements.setY(element.getY());
+        List<SpaceElements> elements = space.getElements();
+        elements.add(spaceElements);
+        space.setElements(elements);
+        spaceRepository.save(space);
+        return;
     }
 
     @Transactional

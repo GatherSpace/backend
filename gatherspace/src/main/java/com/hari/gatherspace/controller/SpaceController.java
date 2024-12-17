@@ -1,13 +1,18 @@
 package com.hari.gatherspace.controller;
 
 import com.hari.gatherspace.config.JwtUtil;
+import com.hari.gatherspace.dto.ElementDTO;
+import com.hari.gatherspace.dto.SpaceDTO;
+import com.hari.gatherspace.model.Element;
 import com.hari.gatherspace.model.Space;
 import com.hari.gatherspace.model.SpaceElements;
+import com.hari.gatherspace.service.ElementService;
 import com.hari.gatherspace.service.MapService;
 import com.hari.gatherspace.service.SpaceService;
 import com.hari.gatherspace.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +31,9 @@ public class SpaceController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ElementService elementService;
 
     private JwtUtil jwtUtil = new JwtUtil();
 
@@ -109,4 +117,88 @@ public class SpaceController {
 
     }
 
+    @GetMapping("/{spaceId}")
+    public ResponseEntity<SpaceDTO> getSpaceById(@PathVariable String spaceId) {
+        try {
+            Space space = spaceService.getSpaceById(spaceId);
+
+            SpaceDTO spaceDTO = new SpaceDTO();
+            spaceDTO.setId(space.getId());
+            spaceDTO.setName(space.getName());
+            spaceDTO.setCreatorId(space.getCreatorId());
+            spaceDTO.setThumbnail(space.getThumbnail());
+            spaceDTO.setDimensions(space.getWidth() + "x" + space.getHeight());
+            spaceDTO.setElements(space.getElements());
+
+            return ResponseEntity.ok(spaceDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(null);
+        }
+    }
+
+    @PostMapping("/element")
+    public ResponseEntity<Map<String, String>> addElement(@RequestBody Map<String, String> elementDetails) {
+        ElementDTO elementDTO = new ElementDTO();
+        elementDTO.setElementId(elementDetails.get("elementId"));
+        elementDTO.setSpaceId(elementDetails.get("spaceId"));
+        elementDTO.setX(Integer.parseInt(elementDetails.get("x")));
+        elementDTO.setY(Integer.parseInt(elementDetails.get("y")));
+
+        try {
+            spaceService.addElement(elementDTO);
+            return ResponseEntity.ok(Map.of("message", "Element added successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(Map.of("error", "Invalid element details"));
+        }
+    }
+
+    @DeleteMapping("/element")
+    public ResponseEntity<Map<String, String>> removeElement(HttpServletRequest request, @RequestBody Map<String, String> elementDetails) {
+        String token = jwtUtil.extractToken(request);
+        String username = jwtUtil.extractUsername(token);
+
+        try {
+            String userId = userService.getUser(username).get().getId();
+            String spaceElementId = elementDetails.get("id");
+
+            // 1. Fetch the SpaceElement
+            SpaceElements spaceElement = spaceService.getSpaceElementById(spaceElementId);
+
+            if (spaceElement == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "SpaceElement not found"));
+            }
+
+            // 2. Fetch the associated Space
+            Space space = spaceService.getSpaceById(spaceElement.getSpaceId());
+
+            if (space == null) {
+                // Handle case where Space is not found (shouldn't happen normally)
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Associated Space not found"));
+            }
+
+            // 3. Check if the user is the creator of the Space
+            if (!space.getCreatorId().equals(userId)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Unauthorized: Only the space creator can delete elements"));
+            }
+
+            // 4. Delete the SpaceElement
+            spaceService.deleteSpaceElement(spaceElementId);
+
+            return ResponseEntity.ok(Map.of("message", "SpaceElement deleted successfully"));
+
+        } catch (Exception e) {
+            // Log the exception for debugging purposes
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "An error occurred: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/elements")
+    public ResponseEntity<Map<String, List<Element>>> getElements() {
+        try {
+            elementService.getElements();
+            return ResponseEntity.ok(Map.of("elements", elementService.getElements()));
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(Map.of("error", null));
+        }
+    }
 }

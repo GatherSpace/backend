@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface SpaceRepository extends JpaRepository<Space, String> {
 
-    public List<Space> findAllByCreatorId(String userId);
+    public List<Space> findAllByUserId(String userId);
 }
