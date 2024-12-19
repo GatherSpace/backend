@@ -55,5 +55,9 @@ public class UserService implements UserDetailsService {
         System.out.println(user.get().getUsername());
         return new org.springframework.security.core.userdetails.User(user.get().getUsername(),user.get().getPassword(), java.util.Collections.emptyList());
     }
+
+    public void removeUser(String userId) {
+
+    }
 }
 

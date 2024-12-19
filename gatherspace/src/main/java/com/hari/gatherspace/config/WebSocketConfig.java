@@ -1,4 +1,4 @@
-package com.example.myapp.config;
+package com.hari.gatherspace.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
