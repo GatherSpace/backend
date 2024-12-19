@@ -40,6 +40,7 @@ package com.hari.gatherspace.config;
      public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
          http.csrf(AbstractHttpConfigurer::disable)
                  .authorizeHttpRequests(request -> request
+
                          .requestMatchers("/api/signup", "/api/signin").permitAll()
                          .anyRequest().authenticated())
                  .sessionManagement(session -> session

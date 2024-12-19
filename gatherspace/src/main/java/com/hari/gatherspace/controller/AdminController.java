@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("api/admin")
 public class AdminController {
 
     @Autowired
@@ -27,14 +27,20 @@ public class AdminController {
 
     @PostMapping("/element")
     public ResponseEntity<ElementResponse> createElement(@RequestBody CreateElementRequest request) {
+//        System.out.println("control reaches here");
+//        System.out.println(request.getImageUrl());
+//        System.out.println(request.getHeight() + " " + request.getWidth() + " " + request.getStaticValue());
         Element createdElement = elementService.createElement(request);
+//        System.out.println(createdElement.getId());
         ElementResponse response = new ElementResponse(createdElement.getId());
+        System.out.println(response.getId());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 
     @PutMapping("/element/{elementId}")
     public ResponseEntity<String> updateElement(@PathVariable String elementId,  @RequestBody UpdateElementRequest request) {
+        System.out.println("control reaches here for updating element");
         try {
             elementService.updateElement(elementId, request);
             return ResponseEntity.ok("Element updated successfully");
@@ -46,7 +52,9 @@ public class AdminController {
 
     @PostMapping("/avatar")
     public ResponseEntity<AvatarResponse> createAvatar(@RequestBody CreateAvatarRequest request) {
+        System.out.println("control reaches here for creating avatar");
         Avatar createdAvatar = avatarService.createAvatar(request);
+        System.out.println(createdAvatar.getId());
         AvatarResponse response = new AvatarResponse(createdAvatar.getId());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

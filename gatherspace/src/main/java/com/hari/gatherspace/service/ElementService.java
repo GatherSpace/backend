@@ -15,6 +15,10 @@ public class ElementService {
     @Autowired
     private ElementRepository elementRepository;
 
+    public Element getElement(String elementId) {
+        return elementRepository.findById(elementId).get();
+    }
+
     public List<Element> getElements() {
         return elementRepository.findAll();
     }

@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 
-
+import java.util.List;
 import java.util.Optional;
 
 
@@ -26,8 +26,13 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void updateUser( User user){
 
-         userRepository.save(user);
+         User usser = userRepository.save(user);
+        System.out.println(user.getAvatarId());
          return;
+    }
+
+    public List<User> getUsersById(List<String> ids){
+        return userRepository.findAllById(ids);
     }
     @Transactional
     public User saveUser(User user){

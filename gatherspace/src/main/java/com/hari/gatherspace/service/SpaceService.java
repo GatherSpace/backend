@@ -83,6 +83,6 @@ public class SpaceService {
     }
 
     public List<Space> getAllSpaces(String userId) {
-        return spaceRepository.findAllByUserId(userId);
+        return spaceRepository.findAllByCreatorId(userId);
     }
 }

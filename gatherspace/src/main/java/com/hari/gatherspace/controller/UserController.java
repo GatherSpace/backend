@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.hari.gatherspace.config.JwtUtil;
+import com.hari.gatherspace.dto.AvatarDto;
 import com.hari.gatherspace.model.Avatar;
 import com.hari.gatherspace.model.Role;
 import com.hari.gatherspace.model.User;
@@ -60,11 +61,11 @@ public class UserController {
      */
 
     @GetMapping("/avatars")
-    public ResponseEntity<Map<String, List<Avatar>>> getAvatars() {
+    public ResponseEntity<Map<String, List<AvatarDto>>> getAvatars() {
 
         List<Avatar> avatars = avatarService.findAll();
-
-        return ResponseEntity.ok().body(Map.of("avatars", avatars));
+        List<AvatarDto> avatarDtos = avatars.stream().map(avatar -> new AvatarDto(avatar.getId(), avatar.getImageUrl(), avatar.getName())).toList();
+        return ResponseEntity.ok().body(Map.of("avatars", avatarDtos));
     }
 
     @GetMapping("/metadata/bulk")

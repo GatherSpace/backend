@@ -2,6 +2,7 @@ package com.hari.gatherspace.service;
 
 import com.hari.gatherspace.dto.CreateMapRequest;
 import com.hari.gatherspace.dto.DefaultElement;
+import com.hari.gatherspace.model.Element;
 import com.hari.gatherspace.model.Map;
 import com.hari.gatherspace.model.MapElements;
 import com.hari.gatherspace.repository.MapElementRepository;
@@ -21,6 +22,9 @@ public class MapService {
 
     @Autowired
     private MapElementRepository mapElementsRepository;
+
+    @Autowired
+    private ElementService elementService;
 
     public Map getMapById(String id) {
         return mapRepository.findById(id).orElse(null);
@@ -44,10 +48,15 @@ public class MapService {
         List<MapElements> mapElements = new ArrayList<>();
         for (DefaultElement defaultElement : request.getDefaultElements()) {
             MapElements mapElement = new MapElements();
-            mapElement.setMapId(map.getId());
+            Element element = elementService.getElement(defaultElement.getElementId());
             mapElement.setElementId(defaultElement.getElementId());
+            mapElement.setMapId(map.getId());
+            // if x and y are outside the map, set them to the edge of the map
+
+
             mapElement.setX(defaultElement.getX());
             mapElement.setY(defaultElement.getY());
+            mapElement.setStaticValue(element.isStaticValue());
             mapElements.add(mapElement);
         }
         mapElementsRepository.saveAll(mapElements);

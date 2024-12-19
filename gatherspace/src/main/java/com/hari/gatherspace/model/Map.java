@@ -10,8 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "maps")
-@Getter
-@Setter
+
 public class Map {
 
     @Id
@@ -30,6 +29,55 @@ public class Map {
 
     private String thumbnail;
 
-    @OneToMany(mappedBy = "map", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "mapId", cascade = CascadeType.ALL)
     private List<MapElements> mapElements;
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public List<MapElements> getMapElements() {
+        return mapElements;
+    }
+
+    public void setMapElements(List<MapElements> mapElements) {
+        this.mapElements = mapElements;
+    }
 }

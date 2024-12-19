@@ -4,8 +4,6 @@ package com.hari.gatherspace.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
 public class DefaultElement {
 
     private String elementId;
@@ -15,4 +13,28 @@ public class DefaultElement {
 
 
     private Integer y;
+
+    public String getElementId() {
+        return elementId;
+    }
+
+    public void setElementId(String elementId) {
+        this.elementId = elementId;
+    }
+
+    public Integer getX() {
+        return x;
+    }
+
+    public void setX(Integer x) {
+        this.x = x;
+    }
+
+    public Integer getY() {
+        return y;
+    }
+
+    public void setY(Integer y) {
+        this.y = y;
+    }
 }

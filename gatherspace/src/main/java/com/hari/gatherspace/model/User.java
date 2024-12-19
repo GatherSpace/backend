@@ -1,6 +1,7 @@
 package com.hari.gatherspace.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -36,6 +37,7 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "avatarId", insertable = false, updatable = false)
+    @JsonBackReference
     private Avatar avatar;
 
 

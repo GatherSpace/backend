@@ -46,7 +46,7 @@ public class AuthController {
             User user2 = userService.saveUser(user1);
 
             System.out.println("control reaches here");
-            return ResponseEntity.accepted().body(Map.of("message", "User created successfully."));
+            return ResponseEntity.accepted().body(Map.of("userId", user2.getId()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }

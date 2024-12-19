@@ -10,8 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "space")
-@Getter
-@Setter
+
 public class Space {
 
     @Id
@@ -40,4 +39,68 @@ public class Space {
 
     @OneToMany(mappedBy = "space")
     private List<SpaceElements> elements;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getWidth() {
+        return width;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public String getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
+    public List<SpaceElements> getElements() {
+        return elements;
+    }
+
+    public void setElements(List<SpaceElements> elements) {
+        this.elements = elements;
+    }
 }
