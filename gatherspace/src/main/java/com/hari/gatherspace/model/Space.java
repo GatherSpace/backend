@@ -1,6 +1,8 @@
 package com.hari.gatherspace.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,9 +37,11 @@ public class Space {
 
     @ManyToOne
     @JoinColumn(name = "creatorId", insertable = false, updatable = false)
+    @JsonBackReference
     private User creator;
 
-    @OneToMany(mappedBy = "space")
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<SpaceElements> elements;
 
     public String getId() {

@@ -2,6 +2,7 @@ package com.hari.gatherspace.service;
 
 import com.hari.gatherspace.dto.ElementDTO;
 import com.hari.gatherspace.model.Map;
+import com.hari.gatherspace.model.MapElements;
 import com.hari.gatherspace.model.Space;
 import com.hari.gatherspace.model.SpaceElements;
 import com.hari.gatherspace.repository.SpaceRepository;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class SpaceService {
@@ -27,19 +30,45 @@ public class SpaceService {
     public Space createSpace(Space space, Map map) {
         Space space1 = spaceRepository.save(space);
         space1.setThumbnail(map.getThumbnail());
-        space1.setElements(map.getMapElements().stream().map(e -> {
-            SpaceElements spaceElements = new SpaceElements();
-            spaceElements.setSpaceId(space1.getId());
-            spaceElements.setElementId(e.getId());
-            spaceElements.setX(e.getX());
-            spaceElements.setY(e.getY());
-            return spaceElements;
-        }).toList());
+        System.out.println("space Id: " + " " + space1.getId());
+        try {
+            List<MapElements> mapElements = map.getMapElements();
+            if (mapElements != null) {
+                List<SpaceElements> spaceElementsList = mapElements.stream()
+                        .filter(Objects::nonNull)
+                        .map(e -> {
+                            SpaceElements spaceElements = new SpaceElements();
+                            spaceElements.setSpaceId(space1.getId());
 
-        return spaceRepository.save(space1);
+                            if (e.getElementId() != null) {
+                                spaceElements.setElementId(e.getElementId());
+                            } else {
+                                System.err.println("Warning: MapElement has a null ElementId.");
+                            }
 
+                            spaceElements.setX(e.getX());
+                            spaceElements.setY(e.getY());
+                            System.out.println("spaceElements: " + spaceElements.getElementId() + " created");
+                            return spaceElements;
+                        })
+                        .collect(Collectors.toList()); // Use collect(Collectors.toList())
 
+                // Save SpaceElements explicitly
+                spaceElementsService.saveAll(spaceElementsList);
 
+                // Now set the saved elements to space1
+                space1.setElements(spaceElementsList);
+            } else {
+                System.out.println("Warning: mapElements is null for map ID: " + map.getId());
+            }
+        } catch (Exception e) {
+            System.out.println("Exception in createSpace: " + e.getMessage());
+            e.printStackTrace();
+        }
+        System.out.println(space1.getElements().size());
+        Space savedSpace = spaceRepository.save(space1);
+        System.out.println("savedSpace: " + " " + "created");
+        return savedSpace;
     }
 
     public SpaceElements getSpaceElementById(String spaceElementId) {
@@ -60,21 +89,22 @@ public class SpaceService {
     }
 
     @Transactional
-    public void addElement(ElementDTO element) {
+    public SpaceElements addElement(ElementDTO element) {
         Space space = spaceRepository.findById(element.getSpaceId()).orElse(null);
         if (space == null) {
-            return;
+            return null;
         }
         SpaceElements spaceElements = new SpaceElements();
         spaceElements.setSpaceId(element.getSpaceId());
         spaceElements.setElementId(element.getElementId());
         spaceElements.setX(element.getX());
         spaceElements.setY(element.getY());
+        SpaceElements savedSpaceElement = spaceElementsService.save(spaceElements);
         List<SpaceElements> elements = space.getElements();
         elements.add(spaceElements);
         space.setElements(elements);
         spaceRepository.save(space);
-        return;
+        return savedSpaceElement;
     }
 
     @Transactional

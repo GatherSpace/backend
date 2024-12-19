@@ -59,8 +59,11 @@ public class MapService {
             mapElement.setStaticValue(element.isStaticValue());
             mapElements.add(mapElement);
         }
-        mapElementsRepository.saveAll(mapElements);
 
-        return map;
+        map.setMapElements(mapElements);
+
+        // Save the map with the MapElements
+
+        return mapRepository.save(map);
     }
 }

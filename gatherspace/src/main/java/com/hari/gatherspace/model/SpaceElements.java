@@ -1,6 +1,7 @@
 package com.hari.gatherspace.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,10 +34,12 @@ public class SpaceElements {
 
     @ManyToOne
     @JoinColumn(name = "spaceId",referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonBackReference
     private Space space;
 
     @ManyToOne
     @JoinColumn(name = "elementId",referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonBackReference
     private Element element;
 
     public String getId() {

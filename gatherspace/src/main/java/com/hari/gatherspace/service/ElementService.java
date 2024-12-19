@@ -1,6 +1,7 @@
 package com.hari.gatherspace.service;
 
 import com.hari.gatherspace.dto.CreateElementRequest;
+import com.hari.gatherspace.dto.ElementAllDto;
 import com.hari.gatherspace.dto.UpdateElementRequest;
 import com.hari.gatherspace.model.Element;
 import com.hari.gatherspace.repository.ElementRepository;
@@ -19,8 +20,18 @@ public class ElementService {
         return elementRepository.findById(elementId).get();
     }
 
-    public List<Element> getElements() {
-        return elementRepository.findAll();
+    public List<ElementAllDto> getElements() {
+        List<Element> elements =  elementRepository.findAll();
+
+        return elements.stream().map(element -> {
+            ElementAllDto dto = new ElementAllDto();
+            dto.setId(element.getId());
+            dto.setImageUrl(element.getImageUrl());
+            dto.setWidth(element.getWidth());
+            dto.setHeight(element.getHeight());
+            dto.setStaticValue(element.isStaticValue());
+            return dto;
+        }).toList();
     }
 
     public Element createElement(CreateElementRequest request) {

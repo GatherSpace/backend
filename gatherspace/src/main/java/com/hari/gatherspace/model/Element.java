@@ -1,6 +1,7 @@
 package com.hari.gatherspace.model;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -33,9 +34,11 @@ public class Element {
 
 
     @OneToMany(mappedBy   = "element", cascade = {CascadeType.ALL})
+    @JsonManagedReference
     private List<SpaceElements> spaces;
 
     @OneToMany(mappedBy = "element", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<MapElements> mapElements;
 
     public String getId() {

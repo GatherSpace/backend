@@ -1,5 +1,6 @@
 package com.hari.gatherspace.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,10 +32,12 @@ public class MapElements {
 
     @ManyToOne
     @JoinColumn(name= "mapId", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonBackReference
     private Map map;
 
     @ManyToOne
     @JoinColumn(name = "elementId",referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonBackReference
     private Element element;
 
 

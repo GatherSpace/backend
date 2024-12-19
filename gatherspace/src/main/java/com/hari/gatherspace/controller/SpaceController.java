@@ -1,6 +1,7 @@
 package com.hari.gatherspace.controller;
 
 import com.hari.gatherspace.config.JwtUtil;
+import com.hari.gatherspace.dto.ElementAllDto;
 import com.hari.gatherspace.dto.ElementDTO;
 import com.hari.gatherspace.dto.SpaceDTO;
 import com.hari.gatherspace.model.Element;
@@ -58,9 +59,9 @@ public class SpaceController {
 
             try {
                 com.hari.gatherspace.model.Map map = mapService.getMapById(mapId);
-
+                System.out.println(map.getId());
                 Space newSpace= spaceService.createSpace(space, map);
-
+                System.out.println(newSpace.getId());
                 return ResponseEntity.ok(Map.of("id", newSpace.getId()));
 
             } catch (Exception e) {
@@ -73,7 +74,7 @@ public class SpaceController {
         return ResponseEntity.status(400).body(Map.of("error", "Invalid space details"));
     }
 
-    @DeleteMapping("/{spaceId}")
+    @DeleteMapping("/space/{spaceId}")
     public ResponseEntity<Map<String, String>> deleteSpace(HttpServletRequest request, @PathVariable String spaceId) {
 
 
@@ -100,7 +101,7 @@ public class SpaceController {
 
     }
 
-    @GetMapping("/all")
+    @GetMapping("space/all")
     public ResponseEntity<Map<String, List<Space>> > getAllSpaces(HttpServletRequest request) {
         String token = jwtUtil.extractToken(request);
 
@@ -117,7 +118,7 @@ public class SpaceController {
 
     }
 
-    @GetMapping("/{spaceId}")
+    @GetMapping("space/{spaceId}")
     public ResponseEntity<SpaceDTO> getSpaceById(@PathVariable String spaceId) {
         try {
             Space space = spaceService.getSpaceById(spaceId);
@@ -136,7 +137,7 @@ public class SpaceController {
         }
     }
 
-    @PostMapping("/element")
+    @PostMapping("space/element")
     public ResponseEntity<Map<String, String>> addElement(@RequestBody Map<String, String> elementDetails) {
         ElementDTO elementDTO = new ElementDTO();
         elementDTO.setElementId(elementDetails.get("elementId"));
@@ -145,14 +146,17 @@ public class SpaceController {
         elementDTO.setY(Integer.parseInt(elementDetails.get("y")));
 
         try {
-            spaceService.addElement(elementDTO);
-            return ResponseEntity.ok(Map.of("message", "Element added successfully"));
+            SpaceElements spaceElements = spaceService.addElement(elementDTO);
+            if (spaceElements != null) {
+                return ResponseEntity.ok(Map.of("id", spaceElements.getId()));
+            }
+            return ResponseEntity.status(400).body(Map.of("Error", "Space Not Found"));
         } catch (Exception e) {
             return ResponseEntity.status(400).body(Map.of("error", "Invalid element details"));
         }
     }
 
-    @DeleteMapping("/element")
+    @DeleteMapping("space/element")
     public ResponseEntity<Map<String, String>> removeElement(HttpServletRequest request, @RequestBody Map<String, String> elementDetails) {
         String token = jwtUtil.extractToken(request);
         String username = jwtUtil.extractUsername(token);
@@ -193,7 +197,7 @@ public class SpaceController {
     }
 
     @GetMapping("/elements")
-    public ResponseEntity<Map<String, List<Element>>> getElements() {
+    public ResponseEntity<Map<String, List<ElementAllDto>>> getElements() {
         try {
             elementService.getElements();
             return ResponseEntity.ok(Map.of("elements", elementService.getElements()));

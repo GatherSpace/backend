@@ -7,11 +7,17 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SpaceElementsService {
 
     @Autowired
     private SpaceElementsRepository spaceElementsRepository;
+
+    public List<SpaceElements> saveAll(List<SpaceElements> spaceElementsList) {
+        return spaceElementsRepository.saveAll(spaceElementsList);
+    }
 
     public SpaceElements save(SpaceElements spaceElements) {
         return spaceElementsRepository.save(spaceElements);

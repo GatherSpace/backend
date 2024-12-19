@@ -1,6 +1,7 @@
 package com.hari.gatherspace.model;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,7 +30,8 @@ public class Map {
 
     private String thumbnail;
 
-    @OneToMany(mappedBy = "mapId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "map", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<MapElements> mapElements;
 
 
