@@ -1,25 +1,27 @@
 package com.hari.gatherspace.config;
 
+
+import com.hari.gatherspace.controller.ws.SpaceWsController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
-import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
-import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 @Configuration
-@EnableWebSocketMessageBroker
-public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+@EnableWebSocket
+public class WebSocketConfig implements WebSocketConfigurer {
 
-  @Override
-  public void registerStompEndpoints(StompEndpointRegistry registry) {
-     registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
-  }
+    private final SpaceWsController spaceController;
 
-  @Override
-  public void configureMessageBroker(MessageBrokerRegistry registry) {
-      registry.enableSimpleBroker("/topic"); // Used for broadcasting
-       registry.setApplicationDestinationPrefixes("/app"); // client can send msg using this prefix.
+    @Autowired
+    public WebSocketConfig(SpaceWsController spaceController) {
+        this.spaceController = spaceController;
+    }
 
-  }
-
+    @Override
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(spaceController, "/ws")
+                .setAllowedOrigins("*"); // Configure allowed origins as needed
+    }
 }

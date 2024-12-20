@@ -41,7 +41,7 @@ package com.hari.gatherspace.config;
          http.csrf(AbstractHttpConfigurer::disable)
                  .authorizeHttpRequests(request -> request
 
-                         .requestMatchers("/api/signup", "/api/signin").permitAll()
+                         .requestMatchers("/api/signup", "/api/signin","/ws/**").permitAll()
                          .anyRequest().authenticated())
                  .sessionManagement(session -> session
                          .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

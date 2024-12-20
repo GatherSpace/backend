@@ -1,42 +1,59 @@
 package com.hari.gatherspace.service.ws;
 
-import com.hari.gatherspace.model.ws.SpaceWs;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hari.gatherspace.model.ws.UserWs;
+import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
+@Service
 public class SpaceWsService {
-    private final Map<String, SpaceWs> spaces = new ConcurrentHashMap<>();
 
-    public SpaceWs getSpace(String spaceId) {
-        return spaces.computeIfAbsent(spaceId, id -> new SpaceWs(id));
+    // Stores rooms and the users within them
+    private final Map<String, List<UserWs>> rooms = new ConcurrentHashMap<>();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    // Method to add a user to a room
+    public void addUserToRoom(String spaceId, UserWs user) {
+        rooms.computeIfAbsent(spaceId, k -> new java.util.ArrayList<>()).add(user);
+        user.setSpaceId(spaceId);
+        System.out.println("User " + user.getId() + " added to room " + spaceId);
     }
 
-    public void addUserToSpace(String spaceId, UserWs user) {
-        SpaceWs space = getSpace(spaceId);
-        space.addUser(user);
-    }
-
-    public void removeUserFromSpace(String spaceId, String userId) {
-        SpaceWs space = getSpace(spaceId);
-        space.removeUser(userId);
-    }
-
-    public void updateUserPosition(String spaceId, String userId, int x, int y) {
-        SpaceWs space = getSpace(spaceId);
-        UserWs user = space.getUser(userId);
-        if (user != null) {
-            user.setPosition(x, y);
+    // Method to remove a user from a room
+    public void removeUserFromRoom(UserWs user, String spaceId) {
+        if (rooms.containsKey(spaceId)) {
+            rooms.get(spaceId).removeIf(u -> u.getId().equals(user.getId()));
+            if (rooms.get(spaceId).isEmpty()) {
+                rooms.remove(spaceId); // Remove the room if it's empty
+            }
+            System.out.println("User " + user.getId() + " removed from room " + spaceId);
         }
     }
 
-    public boolean isValidMove(String spaceId, String userId, int newX, int newY) {
-        SpaceWs space = getSpace(spaceId);
-        UserWs user = space.getUser(userId);
-        if (user != null) {
-            return true;
+    // Method to broadcast a message to all users in a room except the sender
+    public void broadcast(Object messagePayload, UserWs sender, String roomId) {
+        if (rooms.containsKey(roomId)) {
+            String messageJson;
+            try {
+                messageJson = objectMapper.writeValueAsString(messagePayload);
+                for (UserWs user : rooms.get(roomId)) {
+                    if (!user.getId().equals(sender.getId())) {
+                        user.send(messageJson);
+                    }
+                }
+            } catch (IOException e) {
+                System.err.println("Error broadcasting message to room " + roomId + ": " + e.getMessage());
+            }
         }
-        return false;
+    }
+
+    // Get all users in a specific room
+    public List<UserWs> getUsersInRoom(String spaceId) {
+        return rooms.getOrDefault(spaceId, java.util.Collections.emptyList());
     }
 }
