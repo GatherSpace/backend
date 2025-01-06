@@ -30,6 +30,10 @@ public class MapService {
         return mapRepository.findById(id).orElse(null);
     }
 
+    public List<Map> getAllMaps() {
+        return mapRepository.findAll();
+    }
+
 
     @Transactional
     public Map createMap(CreateMapRequest request) {

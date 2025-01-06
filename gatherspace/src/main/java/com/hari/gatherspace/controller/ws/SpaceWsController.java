@@ -112,10 +112,11 @@ public class SpaceWsController extends TextWebSocketHandler {
         Map<String, Object> joinConfirmationPayload = Map.of(
                 "type", "space-joined",
                 "payload", Map.of(
+                        "userId", userWs.getUserId(),
                         "spawn", Map.of("x", spawnX, "y", spawnY),
                         "users", spaceWsService.getUsersInRoom(spaceId).stream()
                                 .filter(u -> !u.getId().equals(userWs.getId()))
-                                .map(u -> Map.of("id", u.getId()))
+                                .map(u -> Map.of("userId", u.getUserId(), "x", u.getX(), "y", u.getY()))
                                 .collect(Collectors.toList())
                 )
         );

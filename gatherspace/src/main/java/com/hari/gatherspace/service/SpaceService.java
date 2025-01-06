@@ -101,9 +101,12 @@ public class SpaceService {
         spaceElements.setY(element.getY());
         SpaceElements savedSpaceElement = spaceElementsService.save(spaceElements);
         List<SpaceElements> elements = space.getElements();
+        System.out.println("elements size: " + elements.size());
         elements.add(spaceElements);
+        System.out.println("elements size: " + elements.size());
         space.setElements(elements);
         spaceRepository.save(space);
+        System.out.println("elements size: " + space.getElements().size());
         return savedSpaceElement;
     }
 

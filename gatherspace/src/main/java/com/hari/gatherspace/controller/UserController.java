@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.hari.gatherspace.config.JwtUtil;
 import com.hari.gatherspace.dto.AvatarDto;
+import com.hari.gatherspace.dto.AvatarUserDto;
 import com.hari.gatherspace.model.Avatar;
 import com.hari.gatherspace.model.Role;
 import com.hari.gatherspace.model.User;
@@ -64,14 +65,19 @@ public class UserController {
     public ResponseEntity<Map<String, List<AvatarDto>>> getAvatars() {
 
         List<Avatar> avatars = avatarService.findAll();
-        List<AvatarDto> avatarDtos = avatars.stream().map(avatar -> new AvatarDto(avatar.getId(), avatar.getImageUrl(), avatar.getName())).toList();
+        List<AvatarDto> avatarDtos = avatars.stream().map(avatar -> new AvatarDto(avatar.getId(), avatar.getImageUrl(), avatar.getName(),
+                avatar.getUsers().stream().map(user -> user.getId()).toList()
+        )).toList();
         return ResponseEntity.ok().body(Map.of("avatars", avatarDtos));
     }
 
     @GetMapping("/metadata/bulk")
     // format /api/user/metadata/bulk?ids=1&ids=2&ids=3s
-    public ResponseEntity<Map<String, List<Avatar>>> getUsersWithMetadata(@RequestParam List<String> ids) {
-        List<Avatar> avatars = avatarService.getAvatarsById(ids);
+    public ResponseEntity<Map<String, List<AvatarUserDto>>> getUsersWithMetadata(@RequestParam List<String> ids) {
+        System.out.println(ids.size());
+        List<AvatarUserDto> avatars = avatarService.getAvatarsById(ids);
+
+
 
         return ResponseEntity.ok().body(Map.of("avatars", avatars));
     }

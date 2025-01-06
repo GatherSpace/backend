@@ -1,5 +1,7 @@
 package com.hari.gatherspace.service;
 
+import com.hari.gatherspace.dto.AvatarDto;
+import com.hari.gatherspace.dto.AvatarUserDto;
 import com.hari.gatherspace.dto.CreateAvatarRequest;
 import com.hari.gatherspace.model.Avatar;
 import com.hari.gatherspace.model.User;
@@ -21,11 +23,21 @@ public class AvatarService {
         return avatarRepository.findAll();
     }
 
-    public List<Avatar> getAvatarsById(List<String> ids) {
+    public List<AvatarUserDto> getAvatarsById(List<String> ids) {
         List<User> users = userService.getUsersById(ids);
+        System.out.println(ids.stream().toList());
+        List<AvatarUserDto> avatarUserDtos = users.stream().map(
+                user -> {
+                    if(user.getAvatar() == null)
+                        return null;
+                    AvatarUserDto dto = new AvatarUserDto(user.getAvatar().getName(), user.getAvatar().getImageUrl(), user.getId(),user.getAvatar().getId());
+                    return dto;
+                }
+        ).filter(dto -> dto!= null).toList();
 
-        List<String> avatarIds = users.stream().map(User::getAvatarId).toList();
-        return avatarRepository.findAllById(avatarIds);
+        return avatarUserDtos;
+
+
     }
 
 

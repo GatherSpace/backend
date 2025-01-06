@@ -205,4 +205,14 @@ public class SpaceController {
             return ResponseEntity.status(400).body(Map.of("error", null));
         }
     }
+
+    @GetMapping("/maps")
+    public ResponseEntity<Map<String, List<com.hari.gatherspace.model.Map>>> getMaps() {
+        try {
+            List<com.hari.gatherspace.model.Map> maps = mapService.getAllMaps();
+            return ResponseEntity.ok(Map.of("maps", maps));
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(Map.of("error", null));
+        }
+    }
 }
