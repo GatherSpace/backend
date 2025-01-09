@@ -41,10 +41,12 @@ public class SpaceWsService {
             String messageJson;
             try {
                 messageJson = objectMapper.writeValueAsString(messagePayload);
+                System.out.println("Broadcasting message to room " + roomId + ": " + messageJson);
                 for (UserWs user : rooms.get(roomId)) {
-                    if (!user.getId().equals(sender.getId())) {
-                        user.send(messageJson);
-                    }
+                        if(!user.getId().equals(sender.getId())) {
+                            System.out.println("message sent to ");
+                            user.send(messageJson);
+                        }
                 }
             } catch (IOException e) {
                 System.err.println("Error broadcasting message to room " + roomId + ": " + e.getMessage());

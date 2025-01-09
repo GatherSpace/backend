@@ -144,7 +144,7 @@ public class SpaceWsController extends TextWebSocketHandler {
         if ((xDisplacement == 1 && yDisplacement == 0) || (xDisplacement == 0 && yDisplacement == 1)) {
             userWs.setX(moveX);
             userWs.setY(moveY);
-
+            System.out.println("User moved to: " + userWs.getX() + ", " + userWs.getY());
             // Broadcast movement to other users in the room
             Map<String, Object> movementPayload = Map.of(
                     "type", "movement",
