@@ -131,7 +131,7 @@ public class SpaceWsController extends TextWebSocketHandler {
                         "y", userWs.getY()
                 )
         );
-        spaceWsService.broadcast(userJoinedPayload, userWs, spaceId);
+        spaceWsService.broadcast(userJoinedPayload, userWs, spaceId, "user-joined");
     }
 
     private void handleMove(UserWs userWs, JsonNode payload) {
@@ -154,7 +154,7 @@ public class SpaceWsController extends TextWebSocketHandler {
                             "y", userWs.getY()
                     )
             );
-            spaceWsService.broadcast(movementPayload, userWs, userWs.getSpaceId());
+            spaceWsService.broadcast(movementPayload, userWs, userWs.getSpaceId(), "movement");
         } else {
             // Send movement rejected message back to the user
             Map<String, Object> rejectPayload = Map.of(
@@ -181,7 +181,7 @@ public class SpaceWsController extends TextWebSocketHandler {
                     "type", "user-left",
                     "payload", Map.of("userId", userWs.getUserId())
             );
-            spaceWsService.broadcast(userLeftPayload, userWs, userWs.getSpaceId());
+            spaceWsService.broadcast(userLeftPayload, userWs, userWs.getSpaceId(), "user-left");
         }
     }
 
