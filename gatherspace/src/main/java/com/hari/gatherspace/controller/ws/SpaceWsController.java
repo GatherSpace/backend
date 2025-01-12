@@ -68,12 +68,22 @@ public class SpaceWsController extends TextWebSocketHandler {
                 case "move":
                     handleMove(userWs, payload);
                     break;
+                case "message":
+                    handleChat(userWs, payload);
+                    break;
                 default:
                     System.out.println("Unknown message type: " + type);
             }
         } catch (IOException e) {
             System.err.println("Error handling WebSocket message: " + e.getMessage());
         }
+    }
+
+    private void handleChat(UserWs userWs, JsonNode payload) throws IOException {
+        String message = payload.get("message").asText();
+        String sendToId = payload.get("userId").asText();
+        Map<String, Object> messagePayload = Map.of("type", "message", "payload" , Map.of("message", message));
+        spaceWsService.sendMessageToUser(userWs, messagePayload, sendToId);
     }
 
     private void handleJoin(UserWs userWs, JsonNode payload) throws IOException {

@@ -1,5 +1,6 @@
 package com.hari.gatherspace.service.ws;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hari.gatherspace.model.ws.UserWs;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,25 @@ public class SpaceWsService {
                 rooms.remove(spaceId); // Remove the room if it's empty
             }
             System.out.println("User " + user.getId() + " removed from room " + spaceId);
+        }
+    }
+
+    public void sendMessageToUser(UserWs user, Object messagePayload, String userId) {
+        String roomId = user.getSpaceId();
+        if (rooms.containsKey(roomId)) {
+            String messageJson;
+            try {
+                messageJson = objectMapper.writeValueAsString(messagePayload);
+                System.out.println("Sending message to user " + user.getId() + " in room " + roomId + ": " + messageJson);
+                for (UserWs u : rooms.get(roomId)) {
+                    if (u.getUserId().equals(userId)) {
+                        System.out.println("message sent to " + u.getId());
+                        u.send(messageJson);
+                    }
+                }
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
