@@ -47,6 +47,7 @@ public class SpaceWsService {
                     if (u.getUserId().equals(userId)) {
                         System.out.println("message sent to " + u.getId());
                         u.send(messageJson);
+                        return;
                     }
                 }
             } catch (JsonProcessingException e) {
