@@ -5,5 +5,5 @@ FROM openjdk:17-jdk-slim
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+# Run the application with the specified profile
+ENTRYPOINT ["java", "-Dspring.profiles.active=build", "-jar", "/app.jar"]
