@@ -38,7 +38,7 @@ public class UserSessionServiceImpl implements UserSessionService {
     }
 
     @Override
-    public List<UserSessionDto> getSessionsByUserId(Long userId) {
+    public List<UserSessionDto> getSessionsByUserId(String userId) {
         List<UserSession> sessions = sessionRepository.findByUserId(userId);
         return sessions.stream()
                 .map(session -> modelMapper.map(session, UserSessionDto.class))
@@ -71,7 +71,7 @@ public class UserSessionServiceImpl implements UserSessionService {
     }
 
     @Override
-    public void invalidateAllSessionsForUser(Long userId) {
+    public void invalidateAllSessionsForUser(String userId) {
         List<UserSession> sessions = sessionRepository.findByUserId(userId);
         sessions.forEach(session -> {
             session.setIsValid(false);

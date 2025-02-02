@@ -32,7 +32,7 @@ public class UserSessionController {
 
     // Get sessions for a given user
     @GetMapping("/user/{userId}")
-    public List<UserSessionDto> getSessionsByUserId(@PathVariable Long userId) {
+    public List<UserSessionDto> getSessionsByUserId(@PathVariable String userId) {
         return userSessionService.getSessionsByUserId(userId);
     }
 
@@ -57,7 +57,7 @@ public class UserSessionController {
 
     // Invalidate all sessions for a given user
     @PostMapping("/invalidateAll/{userId}")
-    public void invalidateAllSessions(@PathVariable Long userId) {
+    public void invalidateAllSessions(@PathVariable String userId) {
         userSessionService.invalidateAllSessionsForUser(userId);
     }
 

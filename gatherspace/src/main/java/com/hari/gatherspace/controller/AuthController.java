@@ -3,9 +3,11 @@ package com.hari.gatherspace.controller;
 import com.hari.gatherspace.config.JwtUtil;
 import com.hari.gatherspace.dto.UserDTO;
 import com.hari.gatherspace.dto.UserSigninDTO;
+import com.hari.gatherspace.dto.UserSessionDto;
 import com.hari.gatherspace.model.Role;
 import com.hari.gatherspace.model.User;
 import com.hari.gatherspace.service.UserService;
+import com.hari.gatherspace.service.UserSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,10 +28,15 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private UserSessionService userSessionService;
 
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@RequestBody UserDTO user) {
@@ -50,16 +58,33 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody UserSigninDTO user) {
-        System.out.println("Login attempt for: {}" + user.getUsername());
+    public ResponseEntity<Map<String, String>> login(
+            @RequestBody UserSigninDTO user,
+            @RequestHeader("User-Agent") String userAgent) {  // Read device info from header
+        log.info("Login attempt for: {}", user.getUsername());
 
         Optional<User> userOptional = userService.getUser(user.getUsername());
         if (userOptional.isPresent()) {
             User user1 = userOptional.get();
             if (passwordEncoder.matches(user.getPassword(), user1.getPassword())) {
+                // Generate tokens
                 String accessToken = jwtUtil.generateAccessToken(user1.getUsername());
                 String refreshToken = jwtUtil.generateRefreshToken(user1.getUsername());
 
+                // Determine refresh token expiration; for example, 7 days from now
+                LocalDateTime expiresAt = LocalDateTime.now().plusDays(7);
+
+                // Create a new user session DTO and set its properties
+                UserSessionDto sessionDto = new UserSessionDto();
+                sessionDto.setUserId(user1.getId());
+                sessionDto.setRefreshToken(refreshToken);
+                sessionDto.setExpiresAt(expiresAt);
+                sessionDto.setDeviceInfo(userAgent); // Device info from request header
+
+                // Save the session via the service
+                userSessionService.addSession(sessionDto);
+
+                // Return the tokens
                 return ResponseEntity.ok(Map.of("accessToken", accessToken, "refreshToken", refreshToken));
             }
         }

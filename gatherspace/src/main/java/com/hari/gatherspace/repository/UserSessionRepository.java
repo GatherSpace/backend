@@ -10,7 +10,7 @@ public interface UserSessionRepository extends JpaRepository<UserSession, Long> 
 
     Optional<UserSession> findByRefreshToken(String refreshToken);
 
-    List<UserSession> findByUserId(Long userId);
+    List<UserSession> findByUserId(String userId);
 
     List<UserSession> findByExpiresAtBefore(LocalDateTime now);
 }

@@ -16,8 +16,8 @@ public class UserSession {
     private Long id;
 
     // The associated user’s ID (you can also use a relation to a User entity)
-    @Column(nullable = false)
-    private Long userId;
+    @Column(nullable = false, length = 512)
+    private String userId;
 
     @Column(nullable = false, unique = true, length = 512)
     private String refreshToken;
@@ -27,4 +27,6 @@ public class UserSession {
 
     @Column(nullable = false)
     private Boolean isValid = true;
+    @Column(length = 256)
+    private String deviceInfo;
 }
