@@ -6,85 +6,78 @@ import com.hari.gatherspace.dto.UserSigninDTO;
 import com.hari.gatherspace.model.Role;
 import com.hari.gatherspace.model.User;
 import com.hari.gatherspace.service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-// /api/signup
-// /api/login
 @RestController
 @RequestMapping("/api")
+@Slf4j
+@RequiredArgsConstructor
 public class AuthController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    PasswordEncoder passwordEncoder;
-
-    JwtUtil jwtUtil;
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@RequestBody UserDTO user) {
-        // TODO: Implement signup logic
-        if(user.getUsername() == null || user.getPassword() == null || user.getRole() == null) {
-            return ResponseEntity.badRequest().body("Username, password and role are required.");
+        if (user.getUsername() == null || user.getPassword() == null || user.getRole() == null) {
+            return ResponseEntity.badRequest().body("Username, password, and role are required.");
         }
-        User user1 = new User();
-        user1.setUsername(user.getUsername());
-        user1.setPassword(passwordEncoder.encode(user.getPassword()));
-        user1.setRole(Objects.equals(user.getRole(), "Admin") ? Role.Admin : Role.User);
+
+        User newUser = new User();
+        newUser.setUsername(user.getUsername());
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setRole(Objects.equals(user.getRole(), "Admin") ? Role.Admin : Role.User);
 
         try {
-            User user2 = userService.saveUser(user1);
-
-            System.out.println("control reaches here");
-            return ResponseEntity.accepted().body(Map.of("userId", user2.getId()));
+            User savedUser = userService.saveUser(newUser);
+            return ResponseEntity.ok(Map.of("userId", savedUser.getId()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
-
-
-
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> login(@RequestBody UserSigninDTO user) {
+        System.out.println("Login attempt for: {}" + user.getUsername());
 
-    @PostMapping("/signin")
-    public ResponseEntity<Map<String, String>> signin(@RequestBody UserSigninDTO user) {
-        // TODO: Implement login logic
-        System.out.println("control reaches here");
-        try {
-            Optional<User> userOptional = userService.getUser(user.getUsername());
-            if (userOptional.isPresent()) {
-                User user1 = userOptional.get();
+        Optional<User> userOptional = userService.getUser(user.getUsername());
+        if (userOptional.isPresent()) {
+            User user1 = userOptional.get();
+            if (passwordEncoder.matches(user.getPassword(), user1.getPassword())) {
+                String accessToken = jwtUtil.generateAccessToken(user1.getUsername());
+                String refreshToken = jwtUtil.generateRefreshToken(user1.getUsername());
 
-                if (passwordEncoder.matches(user.getPassword(), user1.getPassword())) {
-                    jwtUtil = new JwtUtil();
-                    System.out.println("control reaches here token not created");
-                    Map<String, String> claims = Map.of("role", user1.getRole().toString());
-                    String token = jwtUtil.generateToken(claims, user1.getUsername());
-                    Map<String, String> response = Map.of("token", token);
-                    System.out.println("control reaches here token created");
-                    return ResponseEntity.ok(response);
-                } else {
-                    return ResponseEntity.badRequest().body(Map.of("message", "Invalid username or password."));
-
-                }
+                return ResponseEntity.ok(Map.of("accessToken", accessToken, "refreshToken", refreshToken));
             }
-            return ResponseEntity.badRequest().body(Map.of("message", "Invalid username or password."));
-
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
+        return ResponseEntity.badRequest().body(Map.of("message", "Invalid username or password."));
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<Map<String, String>> refreshAccessToken(@RequestHeader("Authorization") String refreshToken) {
+        if (refreshToken != null && refreshToken.startsWith("Bearer ")) {
+            refreshToken = refreshToken.substring(7);
+            try {
+                String username = jwtUtil.extractUsername(refreshToken);
+                String newAccessToken = jwtUtil.generateAccessToken(username);
+                return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
+            } catch (Exception e) {
+                return ResponseEntity.status(403).body(Map.of("message", "Invalid refresh token"));
+            }
         }
-
-
-
+        return ResponseEntity.badRequest().body(Map.of("message", "Refresh token is required"));
+    }
 }

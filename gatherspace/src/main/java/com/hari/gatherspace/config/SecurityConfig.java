@@ -49,10 +49,11 @@ package com.hari.gatherspace.config;
                  .authorizeHttpRequests(request -> request
                          .requestMatchers(
                                  "/api/signup",
-                                 "/api/signin",
+                                 "/api/login",
                                  "/ws/**",
                                  "/",
                                  "/swagger-ui/**",
+                                 "/api/refresh-token",
                                  "/v3/api-docs/**",
                                  "/swagger-resources/**",  // Add this
                                  "/configuration/**",      // Add this
