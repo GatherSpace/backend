@@ -10,6 +10,7 @@ import com.hari.gatherspace.service.MapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,15 +26,11 @@ public class AdminController {
     @Autowired
     private MapService mapService;
 
+    @PreAuthorize("hasRole('Admin')")
     @PostMapping("/element")
     public ResponseEntity<ElementResponse> createElement(@RequestBody CreateElementRequest request) {
-//        System.out.println("control reaches here");
-//        System.out.println(request.getImageUrl());
-//        System.out.println(request.getHeight() + " " + request.getWidth() + " " + request.getStaticValue());
         Element createdElement = elementService.createElement(request);
-//        System.out.println(createdElement.getId());
         ElementResponse response = new ElementResponse(createdElement.getId());
-        System.out.println(response.getId());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

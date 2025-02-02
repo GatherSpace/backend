@@ -67,9 +67,17 @@ public class AuthController {
         if (userOptional.isPresent()) {
             User user1 = userOptional.get();
             if (passwordEncoder.matches(user.getPassword(), user1.getPassword())) {
-                // Generate tokens
-                String accessToken = jwtUtil.generateAccessToken(user1.getUsername());
-                String refreshToken = jwtUtil.generateRefreshToken(user1.getUsername());
+                // Generate tokens using the new overloaded methods
+                String accessToken = jwtUtil.generateAccessToken(
+                        user1.getUsername(),
+                        user1.getId(),
+                        user1.getRole().toString()  // convert enum to string, e.g., "Admin"
+                );
+                String refreshToken = jwtUtil.generateRefreshToken(
+                        user1.getUsername(),
+                        user1.getId(),
+                        user1.getRole().toString()
+                );
 
                 // Determine refresh token expiration; for example, 7 days from now
                 LocalDateTime expiresAt = LocalDateTime.now().plusDays(7);
@@ -97,7 +105,10 @@ public class AuthController {
             refreshToken = refreshToken.substring(7);
             try {
                 String username = jwtUtil.extractUsername(refreshToken);
-                String newAccessToken = jwtUtil.generateAccessToken(username);
+                // For refresh tokens, you could also re-embed claims if needed
+                String newAccessToken = jwtUtil.generateAccessToken(username,
+                        jwtUtil.extractUserId(refreshToken),
+                        jwtUtil.extractRole(refreshToken));
                 return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
             } catch (Exception e) {
                 return ResponseEntity.status(403).body(Map.of("message", "Invalid refresh token"));

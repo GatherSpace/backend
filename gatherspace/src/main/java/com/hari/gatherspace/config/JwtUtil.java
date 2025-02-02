@@ -24,15 +24,23 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    private static final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 15; // 15 mins
+    private static final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 15; // 15 minutes
     private static final long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24 * 7; // 7 days
 
-    public String generateAccessToken(String username) {
-        return generateToken(new HashMap<>(), username, ACCESS_TOKEN_EXPIRATION);
+    // New overloads that embed userId and role into the token claims
+
+    public String generateAccessToken(String username, String userId, String role) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", userId);
+        claims.put("role", role);
+        return generateToken(claims, username, ACCESS_TOKEN_EXPIRATION);
     }
 
-    public String generateRefreshToken(String username) {
-        return generateToken(new HashMap<>(), username, REFRESH_TOKEN_EXPIRATION);
+    public String generateRefreshToken(String username, String userId, String role) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", userId);
+        claims.put("role", role);
+        return generateToken(claims, username, REFRESH_TOKEN_EXPIRATION);
     }
 
     private String generateToken(Map<String, Object> claims, String username, long expiration) {
@@ -45,8 +53,20 @@ public class JwtUtil {
                 .compact();
     }
 
+    // Extraction methods
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public String extractUserId(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("userId").toString();
+    }
+
+    public String extractRole(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("role", String.class);
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -70,9 +90,7 @@ public class JwtUtil {
         return null;
     }
 
-
     private SecretKey getSigningKey() {
-        System.out.println(SECRET_KEY);
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
