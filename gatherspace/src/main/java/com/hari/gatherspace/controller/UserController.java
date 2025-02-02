@@ -26,11 +26,9 @@ public class UserController {
 
     @Autowired
     AvatarService avatarService;
+    @Autowired
     private JwtUtil jwtUtil;
 
-    UserController() {
-        this.jwtUtil = new JwtUtil();
-    }
 
     @PostMapping("/metadata")
     public ResponseEntity<Map<String, String>> saveUserMetadata(HttpServletRequest request,@RequestBody Map<String, String> metadata) {
