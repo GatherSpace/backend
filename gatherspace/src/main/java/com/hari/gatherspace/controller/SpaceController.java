@@ -36,7 +36,8 @@ public class SpaceController {
     @Autowired
     private ElementService elementService;
 
-    private JwtUtil jwtUtil = new JwtUtil();
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @PostMapping("/space")
     public ResponseEntity<Map<String, String>> createSpace(HttpServletRequest request, @RequestBody Map<String, String> spaceDetails) {
