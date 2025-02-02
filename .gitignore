@@ -1,0 +1,36 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+### Logs ###
+logs/
+*.log
+
+### Maven ###
+.mvn/
+mvnw
+mvnw.cmd
+
+### Application ###
+application-local.properties
+
+### Spring Boot ###
+*.jar
+*.war
