@@ -2,11 +2,9 @@ package com.hari.gatherspace.config;
 
 
  import com.hari.gatherspace.service.UserService;
- import lombok.RequiredArgsConstructor;
  import org.springframework.beans.factory.annotation.Autowired;
  import org.springframework.context.annotation.Bean;
  import org.springframework.context.annotation.Configuration;
- import org.springframework.http.HttpMethod;
  import org.springframework.security.authentication.AuthenticationManager;
  import org.springframework.security.authentication.AuthenticationProvider;
  import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -24,6 +22,7 @@ package com.hari.gatherspace.config;
  import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
  import java.util.Arrays;
+ import java.util.List;
 
 @Configuration
  @EnableWebSecurity
@@ -48,8 +47,18 @@ package com.hari.gatherspace.config;
 
                  .csrf(AbstractHttpConfigurer::disable)
                  .authorizeHttpRequests(request -> request
-
-                         .requestMatchers("/api/signup", "/api/signin","/ws/**").permitAll()
+                         .requestMatchers(
+                                 "/api/signup",
+                                 "/api/signin",
+                                 "/ws/**",
+                                 "/",
+                                 "/swagger-ui/**",
+                                 "/v3/api-docs/**",
+                                 "/swagger-resources/**",  // Add this
+                                 "/configuration/**",      // Add this
+                                 "/webjars/**",
+                                 "/swagger-ui.html"
+                         ).permitAll()
                          .anyRequest().authenticated())
                  .sessionManagement(session -> session
                          .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -62,7 +71,7 @@ package com.hari.gatherspace.config;
      @Bean
      CorsConfigurationSource corsConfigurationSource() {
          CorsConfiguration configuration = new CorsConfiguration();
-         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
          configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
          configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
          configuration.setAllowCredentials(true);
