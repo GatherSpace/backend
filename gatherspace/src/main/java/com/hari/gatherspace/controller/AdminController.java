@@ -26,7 +26,7 @@ public class AdminController {
     @Autowired
     private MapService mapService;
 
-    @PreAuthorize("hasRole('ROLE_Admin')")
+    @PreAuthorize("hasRole('Admin')")
     @PostMapping("/element")
     public ResponseEntity<ElementResponse> createElement(@RequestBody CreateElementRequest request) {
         Element createdElement = elementService.createElement(request);
@@ -47,6 +47,7 @@ public class AdminController {
     }
 
 
+    @PreAuthorize("hasRole('Admin')")
     @PostMapping("/avatar")
     public ResponseEntity<AvatarResponse> createAvatar(@RequestBody CreateAvatarRequest request) {
         System.out.println("control reaches here for creating avatar");
@@ -57,6 +58,7 @@ public class AdminController {
     }
 
 
+    @PreAuthorize("hasRole('Admin')")
     @PostMapping("/map")
     public ResponseEntity<MapResponse> createMap(@RequestBody CreateMapRequest request) {
         Map createdMap = mapService.createMap(request);
