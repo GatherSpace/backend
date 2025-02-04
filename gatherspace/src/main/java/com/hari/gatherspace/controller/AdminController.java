@@ -26,7 +26,7 @@ public class AdminController {
     @Autowired
     private MapService mapService;
 
-    @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasRole('ROLE_Admin')")
     @PostMapping("/element")
     public ResponseEntity<ElementResponse> createElement(@RequestBody CreateElementRequest request) {
         Element createdElement = elementService.createElement(request);

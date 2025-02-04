@@ -1,9 +1,12 @@
 package com.hari.gatherspace.service;
 
 
+import com.hari.gatherspace.model.Role;
 import com.hari.gatherspace.model.User;
 import com.hari.gatherspace.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,8 +14,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -54,6 +59,8 @@ public class UserService implements UserDetailsService {
         System.out.println(user.get().getUsername());
         return new org.springframework.security.core.userdetails.User(user.get().getUsername(),user.get().getPassword(), java.util.Collections.emptyList());
     }
+
+
 
     public void removeUser(String userId) {
 

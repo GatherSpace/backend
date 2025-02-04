@@ -53,22 +53,6 @@ GatherSpace redefines how teams collaborate remotely by making interactions feel
 git clone https://github.com/YourUsername/GatherSpace.git
 ```
 
-2. Install dependencies:
-
-
-```bash
-cd GatherSpace
-npm install
-```
-
-
-
-3. Run the application:
-
-   
-```bash
-npm start
-```
 
 
 ## Technologies Used
