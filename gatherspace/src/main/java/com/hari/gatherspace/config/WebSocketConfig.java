@@ -1,7 +1,7 @@
 package com.hari.gatherspace.config;
 
 
-import com.hari.gatherspace.controller.ws.SpaceWsController;
+import com.hari.gatherspace.features.space.SpaceWsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
