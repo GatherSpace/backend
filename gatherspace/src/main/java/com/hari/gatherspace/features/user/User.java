@@ -12,7 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @NoArgsConstructor
 public class User {
 
@@ -30,6 +30,7 @@ public class User {
     private String avatarId;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(20)")
     private Role role;
 
     @OneToMany(mappedBy = "creator")
