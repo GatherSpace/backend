@@ -1,6 +1,6 @@
 package com.hari.gatherspace.config;
 
-import com.hari.gatherspace.service.UserService;
+import com.hari.gatherspace.features.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

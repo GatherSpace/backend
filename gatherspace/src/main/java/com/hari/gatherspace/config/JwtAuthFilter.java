@@ -2,7 +2,7 @@ package com.hari.gatherspace.config;
 
 
 
-import com.hari.gatherspace.service.UserService;
+import com.hari.gatherspace.features.user.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
