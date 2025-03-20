@@ -60,7 +60,6 @@ public class SecurityConfig {
                         // Restrict admin endpoints to only users with Admin role.
                         .requestMatchers("/api/admin/**").hasRole("Admin")
                         .anyRequest().authenticated())
-          // getting csrf error in frontend  already disabled globally    .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
