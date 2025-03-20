@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.hari.gatherspace.features.avatar.Avatar;
 import com.hari.gatherspace.features.space.Space;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -14,6 +16,8 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class User {
 
     @Id

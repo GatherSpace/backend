@@ -60,11 +60,12 @@ public class SecurityConfig {
                         // Restrict admin endpoints to only users with Admin role.
                         .requestMatchers("/api/admin/**").hasRole("Admin")
                         .anyRequest().authenticated())
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+//                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
 
         return http.build();
     }
