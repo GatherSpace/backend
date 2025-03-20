@@ -50,7 +50,11 @@ public class SpaceController {
             int height = Integer.parseInt(spaceDetails.get("dimensions").split("x")[1]);
             space.setWidth(width);
             space.setHeight(height);
-            space.setCreatorId(userService.getUser(username).get().getId());
+            if(userService.getUser(username).isPresent()) {
+                System.out.println("userId before saving the space");
+                System.out.println(userService.getUser(username).get().getId());
+                space.setCreatorId(userService.getUser(username).get().getId());
+            }
             String mapId = spaceDetails.get("mapId");
 
             try {

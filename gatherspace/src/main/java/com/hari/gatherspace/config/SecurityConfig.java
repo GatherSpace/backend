@@ -65,8 +65,6 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-//                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
-
         return http.build();
     }
 

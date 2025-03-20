@@ -30,12 +30,13 @@ public class Space {
     private Integer height;
 
     private String thumbnail;
-
-    @Column(nullable = false)
+// size changed to 255 to map with User Entity id as it is a foreign key
+    @Column(nullable = false, length = 255)
     private String creatorId;
 
     @ManyToOne
-    @JoinColumn(name = "creatorId", insertable = false, updatable = false)
+    // referenceColumnName changed
+    @JoinColumn(name = "creatorId", referencedColumnName = "id", insertable = false, updatable = false)
     @JsonBackReference
     private User creator;
 
