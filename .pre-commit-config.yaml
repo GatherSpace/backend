@@ -41,4 +41,4 @@ repos:
       name: Run Spotless check via Maven
       entry: bash -c "cd gatherspace && mvn spotless:check"
       language: system
-      types: [java, yaml, xml, json]
+      stages: [pre-commit, pre-push]
