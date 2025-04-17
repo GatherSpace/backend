@@ -41,14 +41,14 @@ gatherspace/
 
 ## Technologies
 
-| Layer                  | Technology                |
-|------------------------|---------------------------|
-| Backend Framework      | Spring Boot (Java)        |
-| API Documentation      | OpenAPI 3.0               |
-| Real-Time Communication| WebSockets                |
-| Authentication         | JWT                       |
-| Database (Dev)         | H2                        |
-| Containerization       | Docker                    |
+| Layer                   | Technology         |
+| ----------------------- | ------------------ |
+| Backend Framework       | Spring Boot (Java) |
+| API Documentation       | OpenAPI 3.0        |
+| Real-Time Communication | WebSockets         |
+| Authentication          | JWT                |
+| Database (Dev)          | H2                 |
+| Containerization        | Docker             |
 
 ## API Interface
 
@@ -68,6 +68,7 @@ You can generate clients or use Swagger UI for interacting with these endpoints 
 - Java 17+
 - Maven 3.8+
 - Docker (optional for local orchestration)
+- [Pre‑commit](https://pre-commit.com/) (for code formatting checks)
 
 ### Build and Run
 
@@ -89,22 +90,79 @@ http://localhost:8080/swagger-ui/index.html
 
 To view interactive API documentation powered by Springdoc OpenAPI.
 
+## Pre-commit Setup
+
+To ensure consistent formatting and catch issues before commits, GatherSpace uses [pre-commit](https://pre-commit.com/) with the following configuration in `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-vcs-permalinks
+      - id: no-commit-to-branch
+        args: ['--pattern', '^((?!(feat|refac|fix|docs|chore|wip|test)/[0-9]{1,5}-).)*$']
+      - id: end-of-file-fixer
+      - id: forbid-submodules
+      - id: trailing-whitespace
+
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+
+  # Local hook for Java formatting via Spotless
+  - repo: local
+    hooks:
+      - id: mvn-spotless-apply
+        name: Spotless Apply on Staged Java
+        entry: bash -c 'cd gatherspace && mvn spotless:apply -q -Dspotless.includes=$(printf "%s," "$@")'
+        language: system
+        pass_filenames: true
+        stages: [pre-commit]
+```
+
+**Enable pre-commit hooks:**
+
+```bash
+# Install pre-commit (if not already)
+pip install pre-commit
+
+# From the repository root, install the Git hooks
+pre-commit install
+```
+
+Now, each time you commit, staged files will be automatically checked and formatted:
+
+- Python files with Black
+- YAML and common issues via pre-commit-hooks
+- Java files with Spotless (only the files you changed)
+
+To run all checks manually:
+
+```bash
+pre-commit run --all-files
+```
+
 ## Roadmap
 
 The following major features and improvements are under active planning and development:
 
-| Feature / Milestone                             | Status       | Target Release |
-|--------------------------------------------------|--------------|----------------|
-| WebRTC Integration (Video & Voice Chat)          | In Progress  | v1.1           |
-| Proximity-based Chat Enhancements                | Planned      | v1.2           |
-| Application-wide Refactoring                     | Planned      | v1.2           |
-| Extensive Test Coverage and Unit Testing         | Planned      | v1.3           |
-| CI/CD Build Pipelines and PR Review Automation   | Planned      | v1.4           |
-| Developer Automation (Pre-commit Hooks, Scripts) | Planned      | v1.4           |
-| Slack / Trello Integration                       | In Design    | v1.5           |
-| OAuth2 / OpenID Connect Authentication           | Planned      | v1.5           |
-| Interactive Whiteboards in Virtual Rooms         | Planned      | v1.6           |
-| Room Theme Customization                         | Planned      | v1.6           |
+| Feature / Milestone                              | Status      | Target Release |
+| ------------------------------------------------ | ----------- | -------------- |
+| WebRTC Integration (Video & Voice Chat)          | In Progress | v1.1           |
+| Proximity-based Chat Enhancements                | Planned     | v1.2           |
+| Application-wide Refactoring                     | Planned     | v1.2           |
+| Extensive Test Coverage and Unit Testing         | Planned     | v1.3           |
+| CI/CD Build Pipelines and PR Review Automation   | Planned     | v1.4           |
+| Developer Automation (Pre-commit Hooks, Scripts) | Planned     | v1.4           |
+| Slack / Trello Integration                       | In Design   | v1.5           |
+| OAuth2 / OpenID Connect Authentication           | Planned     | v1.5           |
+| Interactive Whiteboards in Virtual Rooms         | Planned     | v1.6           |
+| Room Theme Customization                         | Planned     | v1.6           |
 
 > Note: Releases follow semantic versioning. Each milestone is tracked in the issue tracker and updated continuously.
 
@@ -117,8 +175,11 @@ We welcome contributions from the community.
 1. **Fork** the repository.
 2. **Create a branch** using the following naming convention:
    ```bash
-   git checkout -b <type>/<issue-id>-short-description
    ```
+
+git checkout -b /-short-description
+
+````
    **Examples:**
    - `feat/102-add-avatar-upload`
    - `fix/215-fix-login-redirect`
@@ -131,17 +192,17 @@ We welcome contributions from the community.
    >
    > | Prefix  | Use Case                         |
    > |---------|----------------------------------|
-   > | `feat`  | New feature implementation        |
-   > | `fix`   | Bug fix                           |
-   > | `refac` | Code refactoring                  |
-   > | `docs`  | Documentation only changes        |
-   > | `test`  | Adding or improving tests         |
+   > | `feat`  | New feature implementation       |
+   > | `fix`   | Bug fix                         |
+   > | `refac` | Code refactoring                |
+   > | `docs`  | Documentation only changes      |
+   > | `test`  | Adding or improving tests       |
    > | `chore` | Maintenance, tooling, deps update |
 
 3. **Commit changes**:
    ```bash
-   git commit -m "[feat|fix|refac|docs|test|chore]: <message>"
-   ```
+git commit -m "[feat|fix|refac|docs|test|chore]: <message>"
+````
 
 4. **Push** to your fork and open a **Pull Request**.
 
