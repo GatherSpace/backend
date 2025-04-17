@@ -2,10 +2,14 @@ package com.hari.gatherspace.features.map;
 
 
 import com.hari.gatherspace.features.element.DefaultElement;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.List;
 
 
+@Data
+@Builder
 public class CreateMapRequest {
 
     private String thumbnail;

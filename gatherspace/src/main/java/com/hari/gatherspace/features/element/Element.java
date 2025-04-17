@@ -5,13 +5,18 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.hari.gatherspace.features.map.MapElements;
 import com.hari.gatherspace.features.space.SpaceElements;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.List;
 
 @Entity
 @Table(name = "element")
-
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Element {
 
     @Id

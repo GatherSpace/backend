@@ -4,13 +4,19 @@ package com.hari.gatherspace.features.avatar;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.hari.gatherspace.features.user.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.List;
 
 @Entity
 @Table(name = "avatar")
-
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Avatar {
 
     @Id

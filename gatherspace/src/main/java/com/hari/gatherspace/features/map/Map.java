@@ -3,13 +3,18 @@ package com.hari.gatherspace.features.map;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.List;
 
 @Entity
 @Table(name = "maps")
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Map {
 
     @Id

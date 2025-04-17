@@ -4,6 +4,7 @@ import com.hari.gatherspace.features.element.ElementDTO;
 import com.hari.gatherspace.features.map.Map;
 import com.hari.gatherspace.features.map.MapElements;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class SpaceService {
     @Autowired
@@ -62,7 +64,8 @@ public class SpaceService {
             System.out.println("Exception in createSpace: " + e.getMessage());
             e.printStackTrace();
         }
-        System.out.println(space1.getElements().size());
+        log.info("Space Id: " + space1.getId());
+        log.info("Obj: " + space1);
         Space savedSpace = spaceRepository.save(space1);
         System.out.println("savedSpace: " + " " + "created");
         return savedSpace;

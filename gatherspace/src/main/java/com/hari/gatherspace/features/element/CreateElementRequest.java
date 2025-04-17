@@ -1,6 +1,11 @@
 package com.hari.gatherspace.features.element;
 
 
+import lombok.Builder;
+import lombok.Data;
+
+@Builder
+@Data
 public class CreateElementRequest {
 
     private String imageUrl;
