@@ -1,6 +1,5 @@
 package com.hari.gatherspace.features.element;
 
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,46 +7,43 @@ import lombok.Data;
 @Data
 public class CreateElementRequest {
 
-    private String imageUrl;
+  private String imageUrl;
 
+  private Integer width;
 
-    private Integer width;
+  private Integer height;
 
+  private Boolean staticValue;
 
-    private Integer height;
+  public String getImageUrl() {
+    return imageUrl;
+  }
 
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
 
-    private Boolean staticValue;
+  public Integer getWidth() {
+    return width;
+  }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+  public void setWidth(Integer width) {
+    this.width = width;
+  }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+  public Integer getHeight() {
+    return height;
+  }
 
-    public Integer getWidth() {
-        return width;
-    }
+  public void setHeight(Integer height) {
+    this.height = height;
+  }
 
-    public void setWidth(Integer width) {
-        this.width = width;
-    }
+  public Boolean getStaticValue() {
+    return staticValue;
+  }
 
-    public Integer getHeight() {
-        return height;
-    }
-
-    public void setHeight(Integer height) {
-        this.height = height;
-    }
-
-    public Boolean getStaticValue() {
-        return staticValue;
-    }
-
-    public void setStaticValue(Boolean staticValue) {
-        this.staticValue = staticValue;
-    }
+  public void setStaticValue(Boolean staticValue) {
+    this.staticValue = staticValue;
+  }
 }

@@ -1,32 +1,29 @@
 package com.hari.gatherspace.features.space;
 
-
 import jakarta.transaction.Transactional;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class SpaceElementsService {
 
-    @Autowired
-    private SpaceElementsRepository spaceElementsRepository;
+  @Autowired private SpaceElementsRepository spaceElementsRepository;
 
-    public List<SpaceElements> saveAll(List<SpaceElements> spaceElementsList) {
-        return spaceElementsRepository.saveAll(spaceElementsList);
-    }
+  public List<SpaceElements> saveAll(List<SpaceElements> spaceElementsList) {
+    return spaceElementsRepository.saveAll(spaceElementsList);
+  }
 
-    public SpaceElements save(SpaceElements spaceElements) {
-        return spaceElementsRepository.save(spaceElements);
-    }
+  public SpaceElements save(SpaceElements spaceElements) {
+    return spaceElementsRepository.save(spaceElements);
+  }
 
-    public SpaceElements findById(String id) {
-        return spaceElementsRepository.findById(id).orElse(null);
-    }
+  public SpaceElements findById(String id) {
+    return spaceElementsRepository.findById(id).orElse(null);
+  }
 
-    @Transactional
-    public void deleteById(String id) {
-        spaceElementsRepository.deleteById(id);
-        }
+  @Transactional
+  public void deleteById(String id) {
+    spaceElementsRepository.deleteById(id);
+  }
 }

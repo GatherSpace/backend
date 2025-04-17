@@ -8,8 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @EnableMethodSecurity(prePostEnabled = true)
 public class GatherspaceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(GatherspaceApplication.class, args);
-	}
-
+  public static void main(String[] args) {
+    SpringApplication.run(GatherspaceApplication.class, args);
+  }
 }

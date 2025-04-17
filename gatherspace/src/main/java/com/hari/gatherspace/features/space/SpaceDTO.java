@@ -2,70 +2,64 @@ package com.hari.gatherspace.features.space;
 
 import java.util.List;
 
-
 public class SpaceDTO {
 
+  private String id;
 
-    private String id;
+  public String getId() {
+    return id;
+  }
 
+  public void setId(String id) {
+    this.id = id;
+  }
 
+  public String getDimensions() {
+    return dimensions;
+  }
 
-    public String getId() {
-        return id;
-    }
+  public void setDimensions(String dimensions) {
+    this.dimensions = dimensions;
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getDimensions() {
-        return dimensions;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setDimensions(String dimensions) {
-        this.dimensions = dimensions;
-    }
+  public String getThumbnail() {
+    return thumbnail;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setThumbnail(String thumbnail) {
+    this.thumbnail = thumbnail;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getCreatorId() {
+    return creatorId;
+  }
 
-    public String getThumbnail() {
-        return thumbnail;
-    }
+  public void setCreatorId(String creatorId) {
+    this.creatorId = creatorId;
+  }
 
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
+  public List<SpaceElements> getElements() {
+    return elements;
+  }
 
-    public String getCreatorId() {
-        return creatorId;
-    }
+  public void setElements(List<SpaceElements> elements) {
+    this.elements = elements;
+  }
 
-    public void setCreatorId(String creatorId) {
-        this.creatorId = creatorId;
-    }
+  private String dimensions;
+  private String name;
 
-    public List<SpaceElements> getElements() {
-        return elements;
-    }
+  private String thumbnail;
 
-    public void setElements(List<SpaceElements> elements) {
-        this.elements = elements;
-    }
+  private String creatorId;
 
-    private String dimensions;
-    private String name;
-
-    private String thumbnail;
-
-    private String creatorId;
-
-
-
-    private List<SpaceElements> elements;
+  private List<SpaceElements> elements;
 }

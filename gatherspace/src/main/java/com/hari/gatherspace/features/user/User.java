@@ -1,17 +1,15 @@
 package com.hari.gatherspace.features.user;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.hari.gatherspace.features.avatar.Avatar;
 import com.hari.gatherspace.features.space.Space;
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -20,86 +18,85 @@ import java.util.List;
 @AllArgsConstructor
 public class User {
 
-    @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
-    private String id;
+  @Id
+  @GeneratedValue(generator = "uuid")
+  @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
+  private String id;
 
-    @Column(unique = true, nullable = false)
-    private String username;
+  @Column(unique = true, nullable = false)
+  private String username;
 
-    @Column(nullable = false)
-    private String password;
+  @Column(nullable = false)
+  private String password;
 
-    private String avatarId;
+  private String avatarId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(20)")
-    private Role role;
+  @Enumerated(EnumType.STRING)
+  @Column(columnDefinition = "VARCHAR(20)")
+  private Role role;
 
-    @OneToMany(mappedBy = "creator")
-    @JsonManagedReference
-    private List<Space> spaces;
+  @OneToMany(mappedBy = "creator")
+  @JsonManagedReference
+  private List<Space> spaces;
 
-    @ManyToOne
-    @JoinColumn(name = "avatarId", insertable = false, updatable = false)
-    @JsonBackReference
-    private Avatar avatar;
+  @ManyToOne
+  @JoinColumn(name = "avatarId", insertable = false, updatable = false)
+  @JsonBackReference
+  private Avatar avatar;
 
+  public String getId() {
+    return id;
+  }
 
-    public String getId() {
-        return id;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public String getUsername() {
-        return username;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public String getAvatarId() {
+    return avatarId;
+  }
 
-    public String getAvatarId() {
-        return avatarId;
-    }
+  public void setAvatarId(String avatarId) {
+    this.avatarId = avatarId;
+  }
 
-    public void setAvatarId(String avatarId) {
-        this.avatarId = avatarId;
-    }
+  public Role getRole() {
+    return role;
+  }
 
-    public Role getRole() {
-        return role;
-    }
+  public void setRole(Role role) {
+    this.role = role;
+  }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
+  public List<Space> getSpaces() {
+    return spaces;
+  }
 
-    public List<Space> getSpaces() {
-        return spaces;
-    }
+  public void setSpaces(List<Space> spaces) {
+    this.spaces = spaces;
+  }
 
-    public void setSpaces(List<Space> spaces) {
-        this.spaces = spaces;
-    }
+  public Avatar getAvatar() {
+    return avatar;
+  }
 
-    public Avatar getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(Avatar avatar) {
-        this.avatar = avatar;
-    }
+  public void setAvatar(Avatar avatar) {
+    this.avatar = avatar;
+  }
 }

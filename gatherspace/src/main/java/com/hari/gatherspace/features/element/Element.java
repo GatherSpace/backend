@@ -1,16 +1,14 @@
 package com.hari.gatherspace.features.element;
 
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.hari.gatherspace.features.map.MapElements;
 import com.hari.gatherspace.features.space.SpaceElements;
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-
-import java.util.List;
 
 @Entity
 @Table(name = "element")
@@ -19,85 +17,86 @@ import java.util.List;
 @AllArgsConstructor
 public class Element {
 
-    @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
-    private String id;
+  @Id
+  @GeneratedValue(generator = "uuid")
+  @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
+  private String id;
 
-    @Column(nullable = false)
-    private Integer width;
+  @Column(nullable = false)
+  private Integer width;
 
-    @Column(nullable = false)
-    private Integer height;
+  @Column(nullable = false)
+  private Integer height;
 
-    @Column(nullable = false)
-    private boolean staticValue;
+  @Column(nullable = false)
+  private boolean staticValue;
 
-    @Column(nullable = false)
-    private String imageUrl;
+  @Column(nullable = false)
+  private String imageUrl;
 
+  @OneToMany(
+      mappedBy = "element",
+      cascade = {CascadeType.ALL})
+  @JsonManagedReference
+  private List<SpaceElements> spaces;
 
-    @OneToMany(mappedBy   = "element", cascade = {CascadeType.ALL})
-    @JsonManagedReference
-    private List<SpaceElements> spaces;
+  @OneToMany(mappedBy = "element", cascade = CascadeType.ALL)
+  @JsonManagedReference
+  private List<MapElements> mapElements;
 
-    @OneToMany(mappedBy = "element", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<MapElements> mapElements;
+  public String getId() {
+    return id;
+  }
 
-    public String getId() {
-        return id;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public Integer getWidth() {
+    return width;
+  }
 
-    public Integer getWidth() {
-        return width;
-    }
+  public void setWidth(Integer width) {
+    this.width = width;
+  }
 
-    public void setWidth(Integer width) {
-        this.width = width;
-    }
+  public Integer getHeight() {
+    return height;
+  }
 
-    public Integer getHeight() {
-        return height;
-    }
+  public void setHeight(Integer height) {
+    this.height = height;
+  }
 
-    public void setHeight(Integer height) {
-        this.height = height;
-    }
+  public boolean isStaticValue() {
+    return staticValue;
+  }
 
-    public boolean isStaticValue() {
-        return staticValue;
-    }
+  public void setStaticValue(boolean staticValue) {
+    this.staticValue = staticValue;
+  }
 
-    public void setStaticValue(boolean staticValue) {
-        this.staticValue = staticValue;
-    }
+  public String getImageUrl() {
+    return imageUrl;
+  }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+  public List<SpaceElements> getSpaces() {
+    return spaces;
+  }
 
-    public List<SpaceElements> getSpaces() {
-        return spaces;
-    }
+  public void setSpaces(List<SpaceElements> spaces) {
+    this.spaces = spaces;
+  }
 
-    public void setSpaces(List<SpaceElements> spaces) {
-        this.spaces = spaces;
-    }
+  public List<MapElements> getMapElements() {
+    return mapElements;
+  }
 
-    public List<MapElements> getMapElements() {
-        return mapElements;
-    }
-
-    public void setMapElements(List<MapElements> mapElements) {
-        this.mapElements = mapElements;
-    }
+  public void setMapElements(List<MapElements> mapElements) {
+    this.mapElements = mapElements;
+  }
 }

@@ -1,6 +1,5 @@
 package com.hari.gatherspace.features.element;
 
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,35 +7,33 @@ import lombok.Data;
 @Data
 public class DefaultElement {
 
-    private String elementId;
+  private String elementId;
 
+  private Integer x;
 
-    private Integer x;
+  private Integer y;
 
+  public String getElementId() {
+    return elementId;
+  }
 
-    private Integer y;
+  public void setElementId(String elementId) {
+    this.elementId = elementId;
+  }
 
-    public String getElementId() {
-        return elementId;
-    }
+  public Integer getX() {
+    return x;
+  }
 
-    public void setElementId(String elementId) {
-        this.elementId = elementId;
-    }
+  public void setX(Integer x) {
+    this.x = x;
+  }
 
-    public Integer getX() {
-        return x;
-    }
+  public Integer getY() {
+    return y;
+  }
 
-    public void setX(Integer x) {
-        this.x = x;
-    }
-
-    public Integer getY() {
-        return y;
-    }
-
-    public void setY(Integer y) {
-        this.y = y;
-    }
+  public void setY(Integer y) {
+    this.y = y;
+  }
 }
