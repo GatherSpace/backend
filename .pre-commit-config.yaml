@@ -34,3 +34,11 @@ repos:
       entry: detect-secrets-hook
       files: .*\.(json|yml|yaml|tf)$
       exclude: gatherspace/docker-compose.yml
+
+- repo: local
+  hooks:
+    - id: mvn-spotless-check
+      name: Run Spotless check via Maven
+      entry: bash -c "cd gatherspace && mvn spotless:check"
+      language: system
+      types: [java, yaml, xml, json]
