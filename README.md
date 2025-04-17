@@ -114,18 +114,38 @@ We welcome contributions from the community.
 
 ### Steps to Contribute
 
-1. Fork the repository
-2. Create a feature branch:
+1. **Fork** the repository.
+2. **Create a branch** using the following naming convention:
    ```bash
-   git checkout -b feature/<issue><name>
+   git checkout -b <type>/<issue-id>-short-description
    ```
-3. Commit changes:
-   ```bash
-   git commit -m "[add|fix|feat|wip]: <message>"
-   ```
-4. Push to your fork and open a Pull Request.
+   **Examples:**
+   - `feat/102-add-avatar-upload`
+   - `fix/215-fix-login-redirect`
+   - `refac/321-clean-map-service`
+   - `docs/330-update-readme`
+   - `test/412-add-session-tests`
+   - `chore/490-update-dependencies`
 
-Refer to `CONTRIBUTING.md` for code style, review guidelines, and contributor agreement.
+   > Recommended prefixes:
+   >
+   > | Prefix  | Use Case                         |
+   > |---------|----------------------------------|
+   > | `feat`  | New feature implementation        |
+   > | `fix`   | Bug fix                           |
+   > | `refac` | Code refactoring                  |
+   > | `docs`  | Documentation only changes        |
+   > | `test`  | Adding or improving tests         |
+   > | `chore` | Maintenance, tooling, deps update |
+
+3. **Commit changes**:
+   ```bash
+   git commit -m "[feat|fix|refac|docs|test|chore]: <message>"
+   ```
+
+4. **Push** to your fork and open a **Pull Request**.
+
+Refer to `CONTRIBUTING.md` for code style, review steps, and contributor agreement.
 
 ## License
 
