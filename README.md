@@ -175,11 +175,8 @@ We welcome contributions from the community.
 1. **Fork** the repository.
 2. **Create a branch** using the following naming convention:
    ```bash
-   ```
-
-git checkout -b /-short-description
-
-````
+    git checkout -b /-short-description
+    ```
    **Examples:**
    - `feat/102-add-avatar-upload`
    - `fix/215-fix-login-redirect`
@@ -201,8 +198,8 @@ git checkout -b /-short-description
 
 3. **Commit changes**:
    ```bash
-git commit -m "[feat|fix|refac|docs|test|chore]: <message>"
-````
+    git commit -m "[feat|fix|refac|docs|test|chore]: <message>"
+   ```
 
 4. **Push** to your fork and open a **Pull Request**.
 
