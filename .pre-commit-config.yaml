@@ -1,0 +1,36 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+    -   id: check-yaml
+    -   id: check-added-large-files
+    -   id: check-merge-conflict
+    -   id: check-vcs-permalinks
+    -   id: no-commit-to-branch #todo: be intruducted later
+        args: ['--pattern', '^((?!(feat|refac|fix|docs|chore|wip|test)\/[0-9]{1,5}-).)*$']
+    -   id: end-of-file-fixer
+    -   id: forbid-submodules
+    -   id: trailing-whitespace
+-   repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+    -   id: black
+
+
+# Validating commits
+- repo: https://github.com/commitizen-tools/commitizen
+  rev: v3.9.0  # check for latest version
+  hooks:
+    - id: commitizen
+      stages: [commit-msg]
+
+- repo: https://github.com/Yelp/detect-secrets.git
+  rev: v1.5.0
+  hooks:
+    - id: detect-secrets
+      name: Detect secrets
+      always_run: true
+      description: Detects high entropy strings that are likely to be passwords.
+      entry: detect-secrets-hook
+      files: .*\.(json|yml|yaml|tf)$
+      exclude: gatherspace/docker-compose.yml

@@ -3,6 +3,7 @@ package com.hari.gatherspace.features.space;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hari.gatherspace.features.user.UserWs;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 @Service
 public class SpaceWsService {
 
@@ -61,7 +63,7 @@ public class SpaceWsService {
             String messageJson;
             try {
                 messageJson = objectMapper.writeValueAsString(messagePayload);
-                System.out.println("Broadcasting message to room " + roomId + ": " + messageJson);
+                log.info("Broadcasting message to room {}: {}", roomId, messageJson);
                 for (UserWs user : rooms.get(roomId)) {
                     if(messageType.equals("movement")) {
                         user.send(messageJson);
