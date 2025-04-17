@@ -1,6 +1,5 @@
 package com.hari.gatherspace.features.avatar;
 
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,8 +7,6 @@ import lombok.Data;
 @Data
 public class CreateAvatarRequest {
 
-    private String imageUrl;
-
-    private String name;
-
+  private String imageUrl;
+  private String name;
 }
