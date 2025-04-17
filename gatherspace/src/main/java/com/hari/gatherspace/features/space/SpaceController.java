@@ -9,7 +9,6 @@ import com.hari.gatherspace.features.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,15 +17,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class SpaceController {
 
-  @Autowired private SpaceService spaceService;
+  private SpaceService spaceService;
 
-  @Autowired private MapService mapService;
+  private MapService mapService;
 
-  @Autowired private UserService userService;
+  private UserService userService;
 
-  @Autowired private ElementService elementService;
+  private ElementService elementService;
 
-  @Autowired private JwtUtil jwtUtil;
+  private JwtUtil jwtUtil;
 
   @PostMapping("/space")
   public ResponseEntity<Map<String, String>> createSpace(

@@ -8,6 +8,5 @@ import lombok.Data;
 public class CreateAvatarRequest {
 
   private String imageUrl;
-
   private String name;
 }

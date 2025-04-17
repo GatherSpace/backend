@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -15,6 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class Element {
 
   @Id
@@ -43,60 +45,4 @@ public class Element {
   @OneToMany(mappedBy = "element", cascade = CascadeType.ALL)
   @JsonManagedReference
   private List<MapElements> mapElements;
-
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  public Integer getWidth() {
-    return width;
-  }
-
-  public void setWidth(Integer width) {
-    this.width = width;
-  }
-
-  public Integer getHeight() {
-    return height;
-  }
-
-  public void setHeight(Integer height) {
-    this.height = height;
-  }
-
-  public boolean isStaticValue() {
-    return staticValue;
-  }
-
-  public void setStaticValue(boolean staticValue) {
-    this.staticValue = staticValue;
-  }
-
-  public String getImageUrl() {
-    return imageUrl;
-  }
-
-  public void setImageUrl(String imageUrl) {
-    this.imageUrl = imageUrl;
-  }
-
-  public List<SpaceElements> getSpaces() {
-    return spaces;
-  }
-
-  public void setSpaces(List<SpaceElements> spaces) {
-    this.spaces = spaces;
-  }
-
-  public List<MapElements> getMapElements() {
-    return mapElements;
-  }
-
-  public void setMapElements(List<MapElements> mapElements) {
-    this.mapElements = mapElements;
-  }
 }

@@ -1,8 +1,10 @@
 package com.hari.gatherspace.features.user;
 
 import java.io.IOException;
+import lombok.Data;
 import org.springframework.web.socket.WebSocketSession;
 
+@Data
 public class UserWs {
   private String id;
   private String userId; // Corresponds to the authenticated user ID
@@ -21,46 +23,6 @@ public class UserWs {
   private String generateId() {
     // Simple random string generator for WebSocket user ID
     return java.util.UUID.randomUUID().toString();
-  }
-
-  public String getId() {
-    return id;
-  }
-
-  public String getUserId() {
-    return userId;
-  }
-
-  public void setUserId(String userId) {
-    this.userId = userId;
-  }
-
-  public String getSpaceId() {
-    return spaceId;
-  }
-
-  public void setSpaceId(String spaceId) {
-    this.spaceId = spaceId;
-  }
-
-  public int getX() {
-    return x;
-  }
-
-  public void setX(int x) {
-    this.x = x;
-  }
-
-  public int getY() {
-    return y;
-  }
-
-  public void setY(int y) {
-    this.y = y;
-  }
-
-  public WebSocketSession getSession() {
-    return session;
   }
 
   public void send(String message) {

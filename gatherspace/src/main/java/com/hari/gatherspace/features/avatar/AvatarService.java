@@ -3,14 +3,15 @@ package com.hari.gatherspace.features.avatar;
 import com.hari.gatherspace.features.user.User;
 import com.hari.gatherspace.features.user.UserService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class AvatarService {
 
-  @Autowired AvatarRepository avatarRepository;
-  @Autowired UserService userService;
+  AvatarRepository avatarRepository;
+  UserService userService;
 
   public List<Avatar> findAll() {
     return avatarRepository.findAll();

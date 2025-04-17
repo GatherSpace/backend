@@ -14,7 +14,6 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +24,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-  @Autowired private UserService userService;
+  private UserService userService;
 
-  @Autowired private PasswordEncoder passwordEncoder;
+  private PasswordEncoder passwordEncoder;
 
-  @Autowired private JwtUtil jwtUtil;
+  private JwtUtil jwtUtil;
 
-  @Autowired private UserSessionService userSessionService;
+  private UserSessionService userSessionService;
 
   @PostMapping("/signup")
   public ResponseEntity<Object> signup(@RequestBody UserDTO user) {

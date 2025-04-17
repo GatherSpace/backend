@@ -9,7 +9,6 @@ import com.hari.gatherspace.features.map.CreateMapRequest;
 import com.hari.gatherspace.features.map.Map;
 import com.hari.gatherspace.features.map.MapResponse;
 import com.hari.gatherspace.features.map.MapService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,10 +18,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/admin")
 public class AdminController {
 
-  @Autowired private ElementService elementService;
-  @Autowired private AvatarService avatarService;
-
-  @Autowired private MapService mapService;
+  private ElementService elementService;
+  private AvatarService avatarService;
+  private MapService mapService;
 
   @PreAuthorize("hasRole('Admin')")
   @PostMapping("/element")

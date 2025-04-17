@@ -3,11 +3,13 @@ package com.hari.gatherspace.features.space;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.hari.gatherspace.features.element.Element;
 import jakarta.persistence.*;
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 // user can create elements in a space or can use map to assign to spaceelements
 
 @Entity
+@Data
 @Table(name = "space_elements")
 public class SpaceElements {
 
@@ -41,60 +43,4 @@ public class SpaceElements {
       updatable = false)
   @JsonBackReference
   private Element element;
-
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  public String getElementId() {
-    return elementId;
-  }
-
-  public void setElementId(String elementId) {
-    this.elementId = elementId;
-  }
-
-  public String getSpaceId() {
-    return spaceId;
-  }
-
-  public void setSpaceId(String spaceId) {
-    this.spaceId = spaceId;
-  }
-
-  public Integer getX() {
-    return x;
-  }
-
-  public void setX(Integer x) {
-    this.x = x;
-  }
-
-  public Integer getY() {
-    return y;
-  }
-
-  public void setY(Integer y) {
-    this.y = y;
-  }
-
-  public Space getSpace() {
-    return space;
-  }
-
-  public void setSpace(Space space) {
-    this.space = space;
-  }
-
-  public Element getElement() {
-    return element;
-  }
-
-  public void setElement(Element element) {
-    this.element = element;
-  }
 }

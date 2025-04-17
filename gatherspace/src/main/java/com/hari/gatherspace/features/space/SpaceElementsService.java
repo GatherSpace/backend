@@ -2,13 +2,12 @@ package com.hari.gatherspace.features.space;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SpaceElementsService {
 
-  @Autowired private SpaceElementsRepository spaceElementsRepository;
+  private SpaceElementsRepository spaceElementsRepository;
 
   public List<SpaceElements> saveAll(List<SpaceElements> spaceElementsList) {
     return spaceElementsRepository.saveAll(spaceElementsList);

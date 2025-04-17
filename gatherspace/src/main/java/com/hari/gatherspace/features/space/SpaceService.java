@@ -7,15 +7,16 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class SpaceService {
-  @Autowired SpaceRepository spaceRepository;
-  @Autowired SpaceElementsService spaceElementsService;
+  SpaceRepository spaceRepository;
+  SpaceElementsService spaceElementsService;
 
   @Transactional
   public Space saveSpace(Space space) {
@@ -64,8 +65,8 @@ public class SpaceService {
       System.out.println("Exception in createSpace: " + e.getMessage());
       e.printStackTrace();
     }
-    log.info("Space Id: " + space1.getId());
-    log.info("Obj: " + space1);
+    log.info("Space Id: {}", space1.getId());
+    log.info("Obj: {}", space1);
     Space savedSpace = spaceRepository.save(space1);
     System.out.println("savedSpace: " + " " + "created");
     return savedSpace;

@@ -8,7 +8,6 @@ import com.hari.gatherspace.features.avatar.AvatarUserDto;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/user")
 public class UserController {
 
-  @Autowired UserService userService;
+  UserService userService;
 
-  @Autowired AvatarService avatarService;
-  @Autowired private JwtUtil jwtUtil;
+  AvatarService avatarService;
+  private JwtUtil jwtUtil;
 
   @PostMapping("/metadata")
   public ResponseEntity<Map<String, String>> saveUserMetadata(

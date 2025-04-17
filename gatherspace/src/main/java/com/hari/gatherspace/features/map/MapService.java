@@ -6,17 +6,18 @@ import com.hari.gatherspace.features.element.ElementService;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class MapService {
 
-  @Autowired private MapRepository mapRepository;
+  private MapRepository mapRepository;
 
-  @Autowired private MapElementRepository mapElementsRepository;
+  private MapElementRepository mapElementsRepository;
 
-  @Autowired private ElementService elementService;
+  private ElementService elementService;
 
   public Map getMapById(String id) {
     return mapRepository.findById(id).orElse(null);

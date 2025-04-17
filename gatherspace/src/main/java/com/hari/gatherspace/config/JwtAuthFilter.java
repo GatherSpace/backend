@@ -17,8 +17,17 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-  @Autowired private JwtUtil jwtUtil;
-  @Autowired private UserService userService;
+  private JwtUtil jwtUtil;
+  private UserService userService;
+
+  public JwtAuthFilter(UserService userService) {
+    this.userService = userService;
+  }
+
+  @Autowired
+  public JwtAuthFilter(JwtUtil jwtUtil) {
+    this.jwtUtil = jwtUtil;
+  }
 
   @Override
   protected void doFilterInternal(

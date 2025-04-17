@@ -1,13 +1,14 @@
 package com.hari.gatherspace.features.element;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class ElementService {
 
-  @Autowired private ElementRepository elementRepository;
+  private ElementRepository elementRepository;
 
   public Element getElement(String elementId) {
     return elementRepository.findById(elementId).get();
