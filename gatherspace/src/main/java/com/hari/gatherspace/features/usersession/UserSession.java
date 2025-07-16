@@ -2,6 +2,7 @@ package com.hari.gatherspace.features.usersession;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,4 +30,7 @@ public class UserSession {
 
   @Column(length = 256)
   private String deviceInfo;
+
+  @Column(nullable = false)
+  private LocalDateTime loginTime;
 }
