@@ -1,20 +1,18 @@
 package com.hari.gatherspace.features.usersession;
 
 import java.util.List;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/usersessions")
+@RequiredArgsConstructor
 public class UserSessionController {
 
   private final UserSessionService userSessionService;
-
-  @Autowired
-  public UserSessionController(UserSessionService userSessionService) {
-    this.userSessionService = userSessionService;
-  }
 
   // Get all sessions
   @GetMapping

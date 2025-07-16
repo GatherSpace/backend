@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class SpaceWsService {
   public void addUserToRoom(String spaceId, UserWs user) {
     rooms.computeIfAbsent(spaceId, k -> new java.util.ArrayList<>()).add(user);
     user.setSpaceId(spaceId);
-    System.out.println("User " + user.getId() + " added to room " + spaceId);
+      log.info("User {} added to room {}", user.getId(), spaceId);
   }
 
   // Method to remove a user from a room
@@ -32,7 +33,7 @@ public class SpaceWsService {
       if (rooms.get(spaceId).isEmpty()) {
         rooms.remove(spaceId); // Remove the room if it's empty
       }
-      System.out.println("User " + user.getId() + " removed from room " + spaceId);
+        log.info("User {} removed from room {}", user.getId(), spaceId);
     }
   }
 
@@ -42,11 +43,10 @@ public class SpaceWsService {
       String messageJson;
       try {
         messageJson = objectMapper.writeValueAsString(messagePayload);
-        System.out.println(
-            "Sending message to user " + user.getId() + " in room " + roomId + ": " + messageJson);
+          log.info("Sending message to user {} in room {}: {}", user.getId(), roomId, messageJson);
         for (UserWs u : rooms.get(roomId)) {
           if (u.getUserId().equals(userId)) {
-            System.out.println("message sent to " + u.getId());
+              log.info("message sent to {}", u.getId());
             u.send(messageJson);
             return;
           }
@@ -68,12 +68,12 @@ public class SpaceWsService {
           if (messageType.equals("movement")) {
             user.send(messageJson);
           } else if (!user.getId().equals(sender.getId())) {
-            System.out.println("message sent to ");
+            log.info("message sent to ");
             user.send(messageJson);
           }
         }
       } catch (IOException e) {
-        System.err.println("Error broadcasting message to room " + roomId + ": " + e.getMessage());
+          log.error("Error broadcasting message to room {}: {}", roomId, e.getMessage());
       }
     }
   }

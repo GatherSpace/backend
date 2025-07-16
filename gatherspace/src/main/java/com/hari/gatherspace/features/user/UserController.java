@@ -8,17 +8,20 @@ import com.hari.gatherspace.features.avatar.AvatarUserDto;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
+@RequiredArgsConstructor
 public class UserController {
 
-  UserService userService;
+  private final UserService userService;
 
-  AvatarService avatarService;
-  private JwtUtil jwtUtil;
+  private final AvatarService avatarService;
+  private final JwtUtil jwtUtil;
 
   @PostMapping("/metadata")
   public ResponseEntity<Map<String, String>> saveUserMetadata(
@@ -28,9 +31,10 @@ public class UserController {
 
     String username = jwtUtil.extractUsername(token);
 
-    User user = userService.getUser(username).get();
+    User user;
+      user = userService.getUser(username).get();
 
-    user.setAvatarId(metadata.get("avatarId"));
+      user.setAvatarId(metadata.get("avatarId"));
 
     userService.updateUser(user);
 
@@ -60,7 +64,7 @@ public class UserController {
                         avatar.getId(),
                         avatar.getImageUrl(),
                         avatar.getName(),
-                        avatar.getUsers().stream().map(user -> user.getId()).toList()))
+                        avatar.getUsers().stream().map(User::getId).toList()))
             .toList();
     return ResponseEntity.ok().body(Map.of("avatars", avatarDtos));
   }

@@ -28,11 +28,8 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
   private UserService userService;
-
   private PasswordEncoder passwordEncoder;
-
   private JwtUtil jwtUtil;
-
   private UserSessionService userSessionService;
 
   @PostMapping("/signup")
