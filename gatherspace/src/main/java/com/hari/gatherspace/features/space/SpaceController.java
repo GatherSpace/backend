@@ -9,23 +9,28 @@ import com.hari.gatherspace.features.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class SpaceController {
 
-  private SpaceService spaceService;
+  private final SpaceService spaceService;
 
-  private MapService mapService;
+  private final MapService mapService;
 
-  private UserService userService;
+  private final UserService userService;
 
-  private ElementService elementService;
+  private final ElementService elementService;
 
-  private JwtUtil jwtUtil;
+  private final JwtUtil jwtUtil;
 
   @PostMapping("/space")
   public ResponseEntity<Map<String, String>> createSpace(
@@ -45,17 +50,21 @@ public class SpaceController {
       space.setWidth(width);
       space.setHeight(height);
       if (userService.getUser(username).isPresent()) {
-        System.out.println("userId before saving the space");
-        System.out.println(userService.getUser(username).get().getId());
-        space.setCreatorId(userService.getUser(username).get().getId());
+        log.info("userId before saving the space");
+          if (log.isInfoEnabled()) {
+              log.info(userService.getUser(username).get().getId());
+              space.setCreatorId(userService.getUser(username).get().getId());
+          } else {
+              space.setCreatorId(userService.getUser(username).get().getId());
+          }
       }
       String mapId = spaceDetails.get("mapId");
 
       try {
         com.hari.gatherspace.features.map.Map map = mapService.getMapById(mapId);
-        System.out.println(map.getId());
+        log.info(map.getId());
         Space newSpace = spaceService.createSpace(space, map);
-        System.out.println(newSpace.getId());
+        log.info(newSpace.getId());
         return ResponseEntity.ok(Map.of("id", newSpace.getId()));
 
       } catch (Exception e) {

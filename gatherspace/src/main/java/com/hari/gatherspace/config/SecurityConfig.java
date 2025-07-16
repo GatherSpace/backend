@@ -1,7 +1,7 @@
 package com.hari.gatherspace.config;
 
 import com.hari.gatherspace.features.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,16 +26,11 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final UserService userService;
     private final JwtAuthFilter jwtAuthFilter;
-
-    @Autowired
-    public SecurityConfig(UserService userService, JwtAuthFilter jwtAuthFilter) {
-        this.userService = userService;
-        this.jwtAuthFilter = jwtAuthFilter;
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

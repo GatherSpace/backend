@@ -3,21 +3,17 @@ package com.hari.gatherspace.features.usersession;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserSessionServiceImpl implements UserSessionService {
 
   private final UserSessionRepository sessionRepository;
   private final ModelMapper modelMapper;
-
-  @Autowired
-  public UserSessionServiceImpl(UserSessionRepository sessionRepository, ModelMapper modelMapper) {
-    this.sessionRepository = sessionRepository;
-    this.modelMapper = modelMapper;
-  }
 
   @Override
   public List<UserSessionDto> getAllSessions() {
@@ -39,9 +35,10 @@ public class UserSessionServiceImpl implements UserSessionService {
   @Override
   public List<UserSessionDto> getSessionsByUserId(String userId) {
     List<UserSession> sessions = sessionRepository.findByUserId(userId);
-    return sessions.stream()
-        .map(session -> modelMapper.map(session, UserSessionDto.class))
-        .collect(Collectors.toList());
+    List<UserSessionDto> collect = sessions.stream()
+            .map(session -> modelMapper.map(session, UserSessionDto.class))
+            .collect(Collectors.toList());
+    return collect;
   }
 
   @Override

@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Component
+@RequiredArgsConstructor
 public class SpaceWsController extends TextWebSocketHandler {
 
   private final Map<String, UserWs> connectedUsers = new ConcurrentHashMap<>();
@@ -26,18 +29,6 @@ public class SpaceWsController extends TextWebSocketHandler {
   private final UserService userService;
   private final SpaceService spaceService;
   private final SpaceWsService spaceWsService;
-
-  @Autowired
-  public SpaceWsController(
-      JwtUtil jwtUtil,
-      UserService userService,
-      SpaceService spaceService,
-      SpaceWsService spaceWsService) {
-    this.jwtUtil = jwtUtil;
-    this.userService = userService;
-    this.spaceService = spaceService;
-    this.spaceWsService = spaceWsService;
-  }
 
   @Override
   public void afterConnectionEstablished(WebSocketSession session) throws Exception {
