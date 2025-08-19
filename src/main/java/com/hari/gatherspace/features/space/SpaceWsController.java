@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -21,6 +22,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class SpaceWsController extends TextWebSocketHandler {
 
   private final Map<String, UserWs> connectedUsers = new ConcurrentHashMap<>();
@@ -32,7 +34,7 @@ public class SpaceWsController extends TextWebSocketHandler {
 
   @Override
   public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-    System.out.println("WebSocket connection established: " + session.getId());
+    log.info("WebSocket connection established: sessionId={}", session.getId());
     UserWs userWs = new UserWs(session);
     connectedUsers.put(userWs.getId(), userWs);
   }
@@ -46,7 +48,7 @@ public class SpaceWsController extends TextWebSocketHandler {
 
       UserWs userWs = findUserBySessionId(session.getId());
       if (userWs == null) {
-        System.out.println("User not found for session: " + session.getId());
+        log.warn("User not found for session: sessionId={}", session.getId());
         return;
       }
 
@@ -61,10 +63,10 @@ public class SpaceWsController extends TextWebSocketHandler {
           handleChat(userWs, payload);
           break;
         default:
-          System.out.println("Unknown message type: " + type);
+          log.warn("Unknown message type received: type={}", type);
       }
     } catch (IOException e) {
-      System.err.println("Error handling WebSocket message: " + e.getMessage());
+      log.error("Error handling WebSocket message: {}", e.getMessage(), e);
     }
   }
 
@@ -83,7 +85,7 @@ public class SpaceWsController extends TextWebSocketHandler {
 
     User user = userService.getUser(userNameFromToken).orElse(null);
     if (user == null) {
-      System.out.println("User not found with username from token: " + userNameFromToken);
+      log.warn("User not found with username extracted from token: username={}", userNameFromToken);
       userWs.getSession().close(CloseStatus.BAD_DATA);
       return;
     }
@@ -91,11 +93,11 @@ public class SpaceWsController extends TextWebSocketHandler {
 
     Space space = spaceService.getSpaceById(spaceId);
     if (space == null) {
-      System.out.println("Space not found with id: " + spaceId);
+      log.warn("Space not found: spaceId={}", spaceId);
       try {
         userWs.getSession().close(CloseStatus.BAD_DATA);
       } catch (IOException e) {
-        e.printStackTrace();
+        log.error("Error closing session for invalid spaceId {}: {}", spaceId, e.getMessage(), e);
       }
       return;
     }
@@ -143,11 +145,11 @@ public class SpaceWsController extends TextWebSocketHandler {
 
     int xDisplacement = Math.abs(userWs.getX() - moveX);
     int yDisplacement = Math.abs(userWs.getY() - moveY);
-    System.out.println("xDisplacement: " + xDisplacement + " yDisplacement: " + yDisplacement);
+    log.debug("Move displacement calculated: dx={}, dy={}", xDisplacement, yDisplacement);
     if ((xDisplacement == 1 && yDisplacement == 0) || (xDisplacement == 0 && yDisplacement == 1)) {
       userWs.setX(moveX);
       userWs.setY(moveY);
-      System.out.println("User moved to: " + userWs.getX() + ", " + userWs.getY());
+      log.debug("User moved: userId={}, x={}, y={}", userWs.getUserId(), userWs.getX(), userWs.getY());
       // Broadcast movement to other users in the room
       Map<String, Object> movementPayload =
           Map.of(
@@ -177,7 +179,7 @@ public class SpaceWsController extends TextWebSocketHandler {
   public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
     UserWs userWs = findUserBySessionId(session.getId());
     if (userWs != null) {
-      System.out.println("WebSocket connection closed for user: " + userWs.getId());
+      log.info("WebSocket connection closed: userWsId={}, sessionId={}", userWs.getId(), session.getId());
       connectedUsers.remove(userWs.getId());
       spaceWsService.removeUserFromRoom(userWs, userWs.getSpaceId());
 
@@ -199,7 +201,7 @@ public class SpaceWsController extends TextWebSocketHandler {
     try {
       return objectMapper.writeValueAsString(payload);
     } catch (IOException e) {
-      System.err.println("Error converting payload to JSON: " + e.getMessage());
+      log.error("Error converting payload to JSON: {}", e.getMessage(), e);
       return null;
     }
   }

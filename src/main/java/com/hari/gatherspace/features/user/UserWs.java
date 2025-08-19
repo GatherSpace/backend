@@ -2,9 +2,11 @@ package com.hari.gatherspace.features.user;
 
 import java.io.IOException;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.WebSocketSession;
 
 @Data
+@Slf4j
 public class UserWs {
   private String id;
   private String userId; // Corresponds to the authenticated user ID
@@ -31,7 +33,7 @@ public class UserWs {
         session.sendMessage(new org.springframework.web.socket.TextMessage(message));
       }
     } catch (IOException e) {
-      System.err.println("Error sending message to user " + id + ": " + e.getMessage());
+      log.error("Error sending message to user {}: {}", id, e.getMessage(), e);
     }
   }
 }

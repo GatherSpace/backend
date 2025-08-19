@@ -27,7 +27,7 @@ public class SpaceService {
   public Space createSpace(Space space, Map map) {
     Space space1 = spaceRepository.save(space);
     space1.setThumbnail(map.getThumbnail());
-    System.out.println("space Id: " + " " + space1.getId());
+    log.info("Creating space: spaceId={}", space1.getId());
     try {
       List<MapElements> mapElements = map.getMapElements();
       if (mapElements != null) {
@@ -42,13 +42,13 @@ public class SpaceService {
                       if (e.getElementId() != null) {
                         spaceElements.setElementId(e.getElementId());
                       } else {
-                        System.err.println("Warning: MapElement has a null ElementId.");
+                        log.warn("MapElement has a null ElementId for spaceId={}", space1.getId());
                       }
 
                       spaceElements.setX(e.getX());
                       spaceElements.setY(e.getY());
-                      System.out.println(
-                          "spaceElements: " + spaceElements.getElementId() + " created");
+                      log.debug("SpaceElement prepared: elementId={}, x={}, y={}",
+                          spaceElements.getElementId(), spaceElements.getX(), spaceElements.getY());
                       return spaceElements;
                     })
                 .collect(Collectors.toList()); // Use collect(Collectors.toList())
@@ -59,16 +59,15 @@ public class SpaceService {
         // Now set the saved elements to space1
         space1.setElements(spaceElementsList);
       } else {
-        System.out.println("Warning: mapElements is null for map ID: " + map.getId());
+        log.warn("mapElements is null for mapId={}", map.getId());
       }
     } catch (Exception e) {
-      System.out.println("Exception in createSpace: " + e.getMessage());
-      e.printStackTrace();
+      log.error("Exception in createSpace: {}", e.getMessage(), e);
     }
     log.info("Space Id: {}", space1.getId());
     log.info("Obj: {}", space1);
     Space savedSpace = spaceRepository.save(space1);
-    System.out.println("savedSpace: " + " " + "created");
+    log.info("Space created: spaceId={}", savedSpace.getId());
     return savedSpace;
   }
 
@@ -99,12 +98,12 @@ public class SpaceService {
     spaceElements.setY(element.getY());
     SpaceElements savedSpaceElement = spaceElementsService.save(spaceElements);
     List<SpaceElements> elements = space.getElements();
-    System.out.println("elements size: " + elements.size());
+    log.debug("elements size before add: {}", elements.size());
     elements.add(spaceElements);
-    System.out.println("elements size: " + elements.size());
+    log.debug("elements size after add: {}", elements.size());
     space.setElements(elements);
     spaceRepository.save(space);
-    System.out.println("elements size: " + space.getElements().size());
+    log.debug("elements size persisted: {}", space.getElements().size());
     return savedSpaceElement;
   }
 
