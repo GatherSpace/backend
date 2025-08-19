@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class UserService implements UserDetailsService {
   private UserRepository userRepository;
 
@@ -23,7 +25,7 @@ public class UserService implements UserDetailsService {
   public void updateUser(User user) {
 
     User usser = userRepository.save(user);
-    System.out.println(user.getAvatarId());
+    log.debug("User avatar updated: userId={}, avatarId={}", usser.getId(), usser.getAvatarId());
     return;
   }
 
@@ -53,10 +55,9 @@ public class UserService implements UserDetailsService {
 
     // Extract roles from User entity and map them to Spring Security authorities
     Collection<GrantedAuthority> authorities = new java.util.ArrayList<>(List.of());
-    System.out.println("ROLE ROLE ROLE ROLE ROLE ROLE ROLE ROLE ROLE ROLE ROLE ROLE ROLE");
-    System.out.println(user.get().getRole().toString());
+    log.debug("Assigning role to user: username={}, role={}", user.get().getUsername(), user.get().getRole());
     authorities.add(new SimpleGrantedAuthority("ROLE_" + user.get().getRole().toString()));
-    System.out.println(user.get().getUsername());
+    log.trace("User loaded: username={}", user.get().getUsername());
     return new org.springframework.security.core.userdetails.User(
         user.get().getUsername(), user.get().getPassword(), authorities);
   }

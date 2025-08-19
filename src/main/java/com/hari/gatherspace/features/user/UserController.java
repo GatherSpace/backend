@@ -10,12 +10,14 @@ import java.util.List;
 import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
   private final UserService userService;
@@ -73,7 +75,7 @@ public class UserController {
   // format /api/user/metadata/bulk?ids=1&ids=2&ids=3s
   public ResponseEntity<Map<String, List<AvatarUserDto>>> getUsersWithMetadata(
       @RequestParam List<String> ids) {
-    System.out.println(ids.size());
+    log.debug("Bulk metadata request: count={}", ids.size());
     List<AvatarUserDto> avatars = avatarService.getAvatarsById(ids);
 
     return ResponseEntity.ok().body(Map.of("avatars", avatars));

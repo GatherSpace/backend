@@ -4,10 +4,12 @@ import com.hari.gatherspace.features.user.User;
 import com.hari.gatherspace.features.user.UserService;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class AvatarService {
 
   AvatarRepository avatarRepository;
@@ -19,7 +21,7 @@ public class AvatarService {
 
   public List<AvatarUserDto> getAvatarsById(List<String> ids) {
     List<User> users = userService.getUsersById(ids);
-    System.out.println(ids.stream().toList());
+    log.debug("Fetching avatars for userIds: {}", ids);
     List<AvatarUserDto> avatarUserDtos =
         users.stream()
             .map(
